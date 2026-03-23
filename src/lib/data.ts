@@ -148,9 +148,10 @@ export const PEC_SCHOOL_ACCESS: PecSchoolAccess[] = (() => {
     }
   });
   
-  // Areas with access to all schools
-  ['pec-dc-1', 'pec-ee-1', 'pec-rc-1', 'pec-mp-1', 'pec-cv-1'].forEach(pecId => {
-    SCHOOLS.forEach(s => access.push({ pec_id: pecId, school_id: s.id }));
+  // All PECs from curricular, especial, conviva, multiplica, recomposicao get access to all schools
+  const allSchoolAreaPrefixes = ['pec-dc-', 'pec-ee-', 'pec-cv-', 'pec-mp-', 'pec-rc-'];
+  PECS.filter(p => allSchoolAreaPrefixes.some(prefix => p.id.startsWith(prefix))).forEach(pec => {
+    SCHOOLS.forEach(s => access.push({ pec_id: pec.id, school_id: s.id }));
   });
   
   return access;
