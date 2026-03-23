@@ -3,11 +3,14 @@ import { Area, PEC, School, Fortnight, FortnightDay, PecSchoolAccess } from './t
 export const AREAS: Area[] = [
   { id: 'qualidade', name: 'PEC Qualidade da Aula', icon: '📚', default_meta: 8, color: 'from-blue-500 to-blue-600' },
   { id: 'curricular', name: 'PEC Desenvolvimento Curricular', icon: '📋', default_meta: null, color: 'from-emerald-500 to-emerald-600' },
-  { id: 'conviva', name: 'PEC Conviva', icon: '🤝', default_meta: 8, color: 'from-amber-500 to-amber-600' },
   { id: 'especial', name: 'PEC Educação Especial', icon: '♿', default_meta: 4, color: 'from-purple-500 to-purple-600' },
-  { id: 'recomposicao', name: 'PEC Recomposição', icon: '🔄', default_meta: 4, color: 'from-rose-500 to-rose-600' },
+  { id: 'conviva', name: 'PEC Conviva', icon: '🤝', default_meta: 8, color: 'from-amber-500 to-amber-600' },
   { id: 'multiplica', name: 'PEC Multiplica', icon: '✖️', default_meta: null, color: 'from-teal-500 to-teal-600' },
+  { id: 'recomposicao', name: 'PEC Recomposição', icon: '🔄', default_meta: 4, color: 'from-rose-500 to-rose-600' },
 ];
+
+// IDs of areas to show on the home screen
+export const HOME_AREA_IDS = ['qualidade', 'curricular', 'especial', 'conviva', 'multiplica'];
 
 // Schools
 const schoolNames = [
@@ -63,6 +66,21 @@ const qualidadePecs: { name: string; meta: number | null; schools: string[] }[] 
   { name: 'Camila', meta: null, schools: [] }, // all schools
 ];
 
+// Desenvolvimento Curricular PECs
+const curricularPecNames = ['Julio', 'Sirlene', 'Valéria', 'Marcone', 'Manoel', 'Noel', 'Roger', 'Camila', 'Janaína', 'Edilian', 'Elenilson'];
+
+// Educação Especial PECs
+const especialPecNames = ['Osvaldo', 'Elaine'];
+
+// Conviva PECs
+const convivaPecNames = ['Márcia', 'Maria Caroline'];
+
+// Multiplica PECs
+const multiplicaPecNames = ['Danila', 'Rosemari'];
+
+// Recomposição PECs
+const recomposicaoPecNames = ['Rodrigo'];
+
 export const PECS: PEC[] = [
   ...qualidadePecs.map((p, i) => ({
     id: `pec-qa-${i + 1}`,
@@ -71,16 +89,46 @@ export const PECS: PEC[] = [
     custom_meta: p.meta,
     active: true,
   })),
-  // Dev Curricular
-  { id: 'pec-dc-1', name: 'PEC Curricular 1', area_id: 'curricular', custom_meta: null, active: true },
-  // Conviva
-  { id: 'pec-cv-1', name: 'PEC Conviva 1', area_id: 'conviva', custom_meta: null, active: true },
+  // Desenvolvimento Curricular
+  ...curricularPecNames.map((name, i) => ({
+    id: `pec-dc-${i + 1}`,
+    name,
+    area_id: 'curricular',
+    custom_meta: null,
+    active: true,
+  })),
   // Educação Especial
-  { id: 'pec-ee-1', name: 'PEC Ed. Especial 1', area_id: 'especial', custom_meta: null, active: true },
-  // Recomposição
-  { id: 'pec-rc-1', name: 'PEC Recomposição 1', area_id: 'recomposicao', custom_meta: null, active: true },
+  ...especialPecNames.map((name, i) => ({
+    id: `pec-ee-${i + 1}`,
+    name,
+    area_id: 'especial',
+    custom_meta: null,
+    active: true,
+  })),
+  // Conviva
+  ...convivaPecNames.map((name, i) => ({
+    id: `pec-cv-${i + 1}`,
+    name,
+    area_id: 'conviva',
+    custom_meta: null,
+    active: true,
+  })),
   // Multiplica
-  { id: 'pec-mp-1', name: 'PEC Multiplica 1', area_id: 'multiplica', custom_meta: null, active: true },
+  ...multiplicaPecNames.map((name, i) => ({
+    id: `pec-mp-${i + 1}`,
+    name,
+    area_id: 'multiplica',
+    custom_meta: null,
+    active: true,
+  })),
+  // Recomposição
+  ...recomposicaoPecNames.map((name, i) => ({
+    id: `pec-rc-${i + 1}`,
+    name,
+    area_id: 'recomposicao',
+    custom_meta: null,
+    active: true,
+  })),
 ];
 
 // PEC-School access mapping
@@ -100,9 +148,10 @@ export const PEC_SCHOOL_ACCESS: PecSchoolAccess[] = (() => {
     }
   });
   
-  // Areas with access to all schools
-  ['pec-dc-1', 'pec-ee-1', 'pec-rc-1', 'pec-mp-1', 'pec-cv-1'].forEach(pecId => {
-    SCHOOLS.forEach(s => access.push({ pec_id: pecId, school_id: s.id }));
+  // All PECs from curricular, especial, conviva, multiplica, recomposicao get access to all schools
+  const allSchoolAreaPrefixes = ['pec-dc-', 'pec-ee-', 'pec-cv-', 'pec-mp-', 'pec-rc-'];
+  PECS.filter(p => allSchoolAreaPrefixes.some(prefix => p.id.startsWith(prefix))).forEach(pec => {
+    SCHOOLS.forEach(s => access.push({ pec_id: pec.id, school_id: s.id }));
   });
   
   return access;
