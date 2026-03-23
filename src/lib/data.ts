@@ -66,6 +66,21 @@ const qualidadePecs: { name: string; meta: number | null; schools: string[] }[] 
   { name: 'Camila', meta: null, schools: [] }, // all schools
 ];
 
+// Desenvolvimento Curricular PECs
+const curricularPecNames = ['Julio', 'Sirlene', 'Valéria', 'Marcone', 'Manoel', 'Noel', 'Roger', 'Camila', 'Janaína', 'Edilian', 'Elenilson'];
+
+// Educação Especial PECs
+const especialPecNames = ['Osvaldo', 'Elaine'];
+
+// Conviva PECs
+const convivaPecNames = ['Márcia', 'Maria Caroline'];
+
+// Multiplica PECs
+const multiplicaPecNames = ['Danila', 'Rosemari'];
+
+// Recomposição PECs
+const recomposicaoPecNames = ['Rodrigo'];
+
 export const PECS: PEC[] = [
   ...qualidadePecs.map((p, i) => ({
     id: `pec-qa-${i + 1}`,
@@ -74,16 +89,46 @@ export const PECS: PEC[] = [
     custom_meta: p.meta,
     active: true,
   })),
-  // Dev Curricular
-  { id: 'pec-dc-1', name: 'PEC Curricular 1', area_id: 'curricular', custom_meta: null, active: true },
-  // Conviva
-  { id: 'pec-cv-1', name: 'PEC Conviva 1', area_id: 'conviva', custom_meta: null, active: true },
+  // Desenvolvimento Curricular
+  ...curricularPecNames.map((name, i) => ({
+    id: `pec-dc-${i + 1}`,
+    name,
+    area_id: 'curricular',
+    custom_meta: null,
+    active: true,
+  })),
   // Educação Especial
-  { id: 'pec-ee-1', name: 'PEC Ed. Especial 1', area_id: 'especial', custom_meta: null, active: true },
-  // Recomposição
-  { id: 'pec-rc-1', name: 'PEC Recomposição 1', area_id: 'recomposicao', custom_meta: null, active: true },
+  ...especialPecNames.map((name, i) => ({
+    id: `pec-ee-${i + 1}`,
+    name,
+    area_id: 'especial',
+    custom_meta: null,
+    active: true,
+  })),
+  // Conviva
+  ...convivaPecNames.map((name, i) => ({
+    id: `pec-cv-${i + 1}`,
+    name,
+    area_id: 'conviva',
+    custom_meta: null,
+    active: true,
+  })),
   // Multiplica
-  { id: 'pec-mp-1', name: 'PEC Multiplica 1', area_id: 'multiplica', custom_meta: null, active: true },
+  ...multiplicaPecNames.map((name, i) => ({
+    id: `pec-mp-${i + 1}`,
+    name,
+    area_id: 'multiplica',
+    custom_meta: null,
+    active: true,
+  })),
+  // Recomposição
+  ...recomposicaoPecNames.map((name, i) => ({
+    id: `pec-rc-${i + 1}`,
+    name,
+    area_id: 'recomposicao',
+    custom_meta: null,
+    active: true,
+  })),
 ];
 
 // PEC-School access mapping
