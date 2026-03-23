@@ -3,11 +3,14 @@ import { Area, PEC, School, Fortnight, FortnightDay, PecSchoolAccess } from './t
 export const AREAS: Area[] = [
   { id: 'qualidade', name: 'PEC Qualidade da Aula', icon: '📚', default_meta: 8, color: 'from-blue-500 to-blue-600' },
   { id: 'curricular', name: 'PEC Desenvolvimento Curricular', icon: '📋', default_meta: null, color: 'from-emerald-500 to-emerald-600' },
-  { id: 'conviva', name: 'PEC Conviva', icon: '🤝', default_meta: 8, color: 'from-amber-500 to-amber-600' },
   { id: 'especial', name: 'PEC Educação Especial', icon: '♿', default_meta: 4, color: 'from-purple-500 to-purple-600' },
-  { id: 'recomposicao', name: 'PEC Recomposição', icon: '🔄', default_meta: 4, color: 'from-rose-500 to-rose-600' },
+  { id: 'conviva', name: 'PEC Conviva', icon: '🤝', default_meta: 8, color: 'from-amber-500 to-amber-600' },
   { id: 'multiplica', name: 'PEC Multiplica', icon: '✖️', default_meta: null, color: 'from-teal-500 to-teal-600' },
+  { id: 'recomposicao', name: 'PEC Recomposição', icon: '🔄', default_meta: 4, color: 'from-rose-500 to-rose-600' },
 ];
+
+// IDs of areas to show on the home screen
+export const HOME_AREA_IDS = ['qualidade', 'curricular', 'especial', 'conviva', 'multiplica'];
 
 // Schools
 const schoolNames = [
