@@ -16,7 +16,7 @@ export default function Header({ title, subtitle, showBack }: HeaderProps) {
         <div className="flex items-center gap-3">
           {showBack && (
             <button
-              onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
+              onClick={() => navigate('/')}
               className="rounded-full p-2 text-primary-foreground/80 transition hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <ArrowLeft className="h-5 w-5" />
