@@ -43,22 +43,10 @@ export type Period = 'manha' | 'tarde';
 
 export type ActivityType =
   | 'Visita à Escola'
-  | 'Convocação'
-  | 'Formação'
-  | 'Reunião'
-  | 'Apoio'
-  | 'Projeto'
-  | 'Live'
   | 'Outros';
 
 export const ACTIVITY_TYPES: ActivityType[] = [
   'Visita à Escola',
-  'Convocação',
-  'Formação',
-  'Reunião',
-  'Apoio',
-  'Projeto',
-  'Live',
   'Outros',
 ];
 
