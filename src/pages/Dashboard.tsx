@@ -1,14 +1,83 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta } from '@/lib/data';
 import { useAppState } from '@/lib/store';
-import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter } from 'lucide-react';
+import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
+const COORD_PASSWORD = 'Gata@9237';
+
 export default function Dashboard() {
-  const { entries } = useAppState();
+  const { entries, loading } = useAppState();
   const [selectedFortnight, setSelectedFortnight] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === COORD_PASSWORD) {
+      setAuthenticated(true);
+      setPasswordError('');
+      sessionStorage.setItem('coord_auth', 'true');
+    } else {
+      setPasswordError('Senha incorreta. Tente novamente.');
+    }
+  };
+
+  // Check session on mount
+  useState(() => {
+    if (sessionStorage.getItem('coord_auth') === 'true') {
+      setAuthenticated(true);
+    }
+  });
+
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header title="Painel da Coordenação" subtitle="Acesso restrito" showBack />
+        <main className="container mx-auto max-w-sm px-4 py-12">
+          <div className="rounded-xl bg-card p-6 shadow-card text-center">
+            <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+              <Lock className="h-6 w-6 text-primary" />
+            </div>
+            <h2 className="text-lg font-bold text-card-foreground mb-1">Área Restrita</h2>
+            <p className="text-sm text-muted-foreground mb-5">Digite a senha para acessar o painel</p>
+            <form onSubmit={handlePasswordSubmit} className="space-y-3">
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={e => { setPasswordInput(e.target.value); setPasswordError(''); }}
+                placeholder="Senha de acesso"
+                className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm text-center focus:outline-none focus:ring-2 focus:ring-ring"
+                autoFocus
+              />
+              {passwordError && (
+                <p className="text-sm text-destructive">{passwordError}</p>
+              )}
+              <button
+                type="submit"
+                className="w-full rounded-lg gradient-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm hover:opacity-90 transition"
+              >
+                Acessar Painel
+              </button>
+            </form>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header title="Painel da Coordenação" subtitle="Indicadores e relatórios" showBack />
+        <main className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </main>
+      </div>
+    );
+  }
 
   const filteredEntries = selectedFortnight
     ? entries.filter(e => e.fortnight_id === selectedFortnight)
@@ -20,11 +89,9 @@ export default function Dashboard() {
   const schoolsVisited = visitedSchoolIds.size;
   const schoolsNotVisited = totalSchools - schoolsVisited;
 
-  // PECs without any agenda entry
   const pecsWithEntries = new Set(filteredEntries.map(e => e.pec_id));
   const pecsWithoutAgenda = PECS.filter(p => p.active && !pecsWithEntries.has(p.id));
 
-  // PECs below meta
   const pecsBelowMeta = PECS.filter(p => {
     const area = AREAS.find(a => a.id === p.area_id);
     if (!area) return false;
@@ -34,11 +101,13 @@ export default function Dashboard() {
     return pecVisits < meta;
   });
 
-  // Schools without visit
   const schoolsNotVisitedList = SCHOOLS.filter(s => !visitedSchoolIds.has(s.id));
+
+  const totalActions = filteredEntries.length;
 
   const stats = [
     { label: 'Total de Visitas', value: visits.length, icon: BarChart3, color: 'text-primary' },
+    { label: 'Total de Ações', value: totalActions, icon: BarChart3, color: 'text-accent' },
     { label: 'Escolas Visitadas', value: schoolsVisited, icon: School, color: 'text-success' },
     { label: 'Escolas Não Visitadas', value: schoolsNotVisited, icon: School, color: 'text-warning' },
     { label: 'PEC sem Agenda', value: pecsWithoutAgenda.length, icon: Users, color: 'text-destructive' },
@@ -87,7 +156,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 mb-6">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 mb-6">
           {stats.map((s, i) => (
             <div
               key={i}
