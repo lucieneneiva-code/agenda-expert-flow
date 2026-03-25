@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ACTIVITY_TYPES, ActivityType, Period, AgendaEntry } from '@/lib/types';
-import { getSchoolsForPec, SCHOOLS } from '@/lib/data';
+import { getSchoolsForPec } from '@/lib/data';
 import { useAppState } from '@/lib/store';
-import { X, Save, Trash2, Check } from 'lucide-react';
+import { X, Save, Trash2, Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ActivityModalProps {
@@ -63,7 +63,7 @@ export default function ActivityModal({
     return null;
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const error = validate();
     if (error) {
       toast.error(error);
@@ -86,25 +86,32 @@ export default function ActivityModal({
       type_other_text: activityType === 'Outros' ? typeOther : null,
     };
 
-    setTimeout(() => {
+    try {
       if (existingEntry) {
-        updateEntry(existingEntry.id, data);
+        await updateEntry(existingEntry.id, data);
         toast.success('Atividade atualizada!');
       } else {
-        addEntry(data);
+        await addEntry(data);
         toast.success('Atividade salva!');
       }
-      setSaving(false);
       setSaved(true);
       setTimeout(() => onClose(), 600);
-    }, 300);
+    } catch {
+      // Error already handled in store
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (existingEntry) {
-      deleteEntry(existingEntry.id);
-      toast.success('Atividade excluída');
-      onClose();
+      try {
+        await deleteEntry(existingEntry.id);
+        toast.success('Atividade excluída');
+        onClose();
+      } catch {
+        // Error already handled in store
+      }
     }
   };
 
@@ -250,7 +257,7 @@ export default function ActivityModal({
             disabled={saving}
             className="ml-auto flex items-center gap-1.5 rounded-lg gradient-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90 disabled:opacity-50"
           >
-            {saved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
             {saving ? 'Salvando...' : saved ? 'Salvo!' : 'Salvar'}
           </button>
         </div>
