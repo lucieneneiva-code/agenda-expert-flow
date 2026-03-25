@@ -59,7 +59,7 @@ const qualidadePecs: { name: string; meta: number | null; schools: string[] }[] 
   { name: 'Fabiano', meta: null, schools: ['BENEDITO CELIO', 'BENEDITO FERREIRA', 'CLAUDIRENE', 'DUARTE LEOPOLDO', 'GIULIO LEONE', 'HERBERT BALDUS', 'HERMINIO', 'MARIAZINHA'] },
   { name: 'Verônica', meta: 7, schools: ['ADOLFO CASAIS', 'CALLIA', 'CONDOMINIO VARGEM', 'LEDA GUIMARAES', 'PAULINO', 'PERILLIER', 'REGINA MIRANDA'] },
   { name: 'Gislaine', meta: 7, schools: ['ANTONIO PEREIRA', 'CLARICE IKEDA', 'LEVI CARNEIRO', 'MARIA AMELIA', 'MARIA JUVENAL', 'MARIO LOPES', 'SANTO DIAS'] },
-  { name: 'Edilene', meta: null, schools: ['ADRIAO BERNARDES', 'CARLOS AYRES', 'CARLOS MORAES', 'ESTHER', 'MARIO ARMINANTE', 'SAMUEL WAINER', 'VERA ATHAYDE'] },
+  { name: 'Edilene', meta: 7, schools: ['ADRIAO BERNARDES', 'CARLOS AYRES', 'CARLOS MORAES', 'ESTHER', 'MARIO ARMINANTE', 'SAMUEL WAINER', 'VERA ATHAYDE'] },
   { name: 'Silvia', meta: null, schools: ['ALEXANDRE ANSALDO', 'CANDIDO OLIVEIRA', 'EVANDRO LINS', 'ITIRO MUTO', 'JACOB', 'JOAO GOULART', 'JOSE BENTO', 'RENE MUAWAD'] },
   { name: 'Marjorie', meta: null, schools: ['ALEXANDRE MARCONDES', 'ANA MARIA', 'ANIZ BADRA', 'AYRTON SENNA', 'ITURBIDES', 'NAIR DAMIAO', 'ROSSINE', 'VICENTINA'] },
   { name: 'Evelyn', meta: null, schools: ['CHRISTIANO ALTENFELDER', 'HILTON REIS', 'ILDA VIEIRA', 'JOAQUIM ALVARES', 'JOSE EPHIM', 'JOSE VIEIRA', 'LEONOR', 'MARIA LUIZA ROQUE'] },
@@ -157,30 +157,57 @@ export const PEC_SCHOOL_ACCESS: PecSchoolAccess[] = (() => {
   return access;
 })();
 
-// Fortnights Q03 to Q21
-export const FORTNIGHTS: Fortnight[] = Array.from({ length: 19 }, (_, i) => {
+// Fixed fortnight date ranges for 2026
+const FORTNIGHT_RANGES: { start: string; end: string }[] = [
+  { start: '2026-04-06', end: '2026-04-17' },
+  { start: '2026-04-20', end: '2026-05-01' },
+  { start: '2026-05-04', end: '2026-05-15' },
+  { start: '2026-05-18', end: '2026-05-29' },
+  { start: '2026-06-01', end: '2026-06-12' },
+  { start: '2026-06-15', end: '2026-06-26' },
+  { start: '2026-06-29', end: '2026-07-10' },
+  { start: '2026-07-13', end: '2026-07-24' },
+  { start: '2026-07-27', end: '2026-08-07' },
+  { start: '2026-08-10', end: '2026-08-21' },
+  { start: '2026-08-24', end: '2026-09-04' },
+  { start: '2026-09-07', end: '2026-09-18' },
+  { start: '2026-09-21', end: '2026-10-02' },
+  { start: '2026-10-05', end: '2026-10-16' },
+  { start: '2026-10-19', end: '2026-10-30' },
+  { start: '2026-11-02', end: '2026-11-13' },
+  { start: '2026-11-16', end: '2026-11-27' },
+  { start: '2026-11-30', end: '2026-12-11' },
+  { start: '2026-12-14', end: '2026-12-25' },
+];
+
+function formatDateBR(isoDate: string): string {
+  const [y, m, d] = isoDate.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+export const FORTNIGHTS: Fortnight[] = FORTNIGHT_RANGES.map((range, i) => {
   const num = i + 3;
   const code = `Q${num.toString().padStart(2, '0')}`;
   return {
     id: `fortnight-${num}`,
     code,
-    label: `Quinzena ${code}`,
+    label: `${code} – ${formatDateBR(range.start)} até ${formatDateBR(range.end)}`,
     order: num,
   };
 });
 
-// Helper to generate fortnight days (10 working days per fortnight)
+// Generate fortnight days from the fixed date ranges (10 working days)
 export function generateFortnightDays(fortnightId: string, fortnightOrder: number): FortnightDay[] {
-  // Generate placeholder dates - in production these would come from DB
-  const baseYear = 2025;
-  const startWeek = (fortnightOrder - 3) * 2 + 5; // approximate weeks
+  const rangeIndex = fortnightOrder - 3;
+  const range = FORTNIGHT_RANGES[rangeIndex];
+  if (!range) return [];
+
   const days: FortnightDay[] = [];
-  
   let dayCount = 0;
-  let currentDate = new Date(baseYear, 0, 1);
-  currentDate.setDate(currentDate.getDate() + (startWeek * 7));
-  
-  while (dayCount < 10) {
+  const currentDate = new Date(range.start + 'T12:00:00');
+  const endDate = new Date(range.end + 'T12:00:00');
+
+  while (currentDate <= endDate) {
     const dow = currentDate.getDay();
     if (dow !== 0 && dow !== 6) {
       dayCount++;
@@ -193,7 +220,7 @@ export function generateFortnightDays(fortnightId: string, fortnightOrder: numbe
     }
     currentDate.setDate(currentDate.getDate() + 1);
   }
-  
+
   return days;
 }
 
