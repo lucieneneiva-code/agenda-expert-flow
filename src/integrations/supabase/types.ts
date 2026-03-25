@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agenda_entries: {
+        Row: {
+          activity_type: string
+          agenda_topic: string | null
+          area_id: string
+          created_at: string
+          day_id: string
+          fortnight_id: string
+          id: string
+          link: string | null
+          observation: string | null
+          pec_id: string
+          period: string
+          school_id: string | null
+          school_other_text: string | null
+          type_other_text: string | null
+          updated_at: string
+        }
+        Insert: {
+          activity_type: string
+          agenda_topic?: string | null
+          area_id: string
+          created_at?: string
+          day_id: string
+          fortnight_id: string
+          id?: string
+          link?: string | null
+          observation?: string | null
+          pec_id: string
+          period: string
+          school_id?: string | null
+          school_other_text?: string | null
+          type_other_text?: string | null
+          updated_at?: string
+        }
+        Update: {
+          activity_type?: string
+          agenda_topic?: string | null
+          area_id?: string
+          created_at?: string
+          day_id?: string
+          fortnight_id?: string
+          id?: string
+          link?: string | null
+          observation?: string | null
+          pec_id?: string
+          period?: string
+          school_id?: string | null
+          school_other_text?: string | null
+          type_other_text?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
