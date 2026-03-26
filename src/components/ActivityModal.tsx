@@ -259,14 +259,23 @@ export default function ActivityModal({
               Excluir
             </button>
           )}
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="ml-auto flex items-center gap-1.5 rounded-lg gradient-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90 disabled:opacity-50"
-          >
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
-            {saving ? 'Salvando...' : saved ? 'Salvo!' : 'Salvar'}
-          </button>
+          {!showReturn ? (
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="ml-auto flex items-center gap-1.5 rounded-lg gradient-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90 disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+              {saving ? 'Salvando...' : saved ? 'Salvo!' : 'Salvar'}
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/')}
+              className="ml-auto flex items-center gap-1.5 rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-accent-foreground shadow-sm transition hover:opacity-90"
+            >
+              Retornar
+            </button>
+          )}
         </div>
       </div>
     </div>
