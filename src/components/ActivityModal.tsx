@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ACTIVITY_TYPES, ActivityType, Period, AgendaEntry } from '@/lib/types';
 import { getSchoolsForPec } from '@/lib/data';
 import { useAppState } from '@/lib/store';
@@ -27,6 +28,7 @@ export default function ActivityModal({
   existingEntry,
 }: ActivityModalProps) {
   const { addEntry, updateEntry, deleteEntry } = useAppState();
+  const navigate = useNavigate();
   const schools = getSchoolsForPec(pecId);
 
   const [activityType, setActivityType] = useState<ActivityType>(
@@ -40,6 +42,7 @@ export default function ActivityModal({
   const [typeOther, setTypeOther] = useState(existingEntry?.type_other_text || '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showReturn, setShowReturn] = useState(false);
 
   useEffect(() => {
     if (existingEntry) {
@@ -95,7 +98,7 @@ export default function ActivityModal({
         toast.success('Atividade salva!');
       }
       setSaved(true);
-      setTimeout(() => onClose(), 600);
+      setShowReturn(true);
     } catch {
       // Error already handled in store
     } finally {
@@ -256,14 +259,23 @@ export default function ActivityModal({
               Excluir
             </button>
           )}
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="ml-auto flex items-center gap-1.5 rounded-lg gradient-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90 disabled:opacity-50"
-          >
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
-            {saving ? 'Salvando...' : saved ? 'Salvo!' : 'Salvar'}
-          </button>
+          {!showReturn ? (
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="ml-auto flex items-center gap-1.5 rounded-lg gradient-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90 disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+              {saving ? 'Salvando...' : saved ? 'Salvo!' : 'Salvar'}
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/')}
+              className="ml-auto flex items-center gap-1.5 rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-accent-foreground shadow-sm transition hover:opacity-90"
+            >
+              Retornar
+            </button>
+          )}
         </div>
       </div>
     </div>
