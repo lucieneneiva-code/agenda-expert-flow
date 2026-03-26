@@ -124,7 +124,7 @@ export default function Dashboard() {
         Área: area?.name || '',
         Escola: school?.name || e.school_other_text || '',
         Período: e.period === 'manha' ? 'Manhã' : 'Tarde',
-        Tipo: e.activity_type,
+        Tipo: e.activity_type === 'Outros' && e.type_other_text ? e.type_other_text : e.activity_type,
         Observação: e.observation || '',
         Pauta: e.agenda_topic || '',
         Link: e.link || '',
@@ -216,7 +216,7 @@ export default function Dashboard() {
                         <td className="px-4 py-2 text-card-foreground">{area?.name}</td>
                         <td className="px-4 py-2 text-card-foreground">{school?.name || e.school_other_text || '—'}</td>
                         <td className="px-4 py-2 text-card-foreground">{e.period === 'manha' ? 'Manhã' : 'Tarde'}</td>
-                        <td className="px-4 py-2 text-card-foreground">{e.activity_type}</td>
+                        <td className="px-4 py-2 text-card-foreground">{e.activity_type === 'Outros' && e.type_other_text ? e.type_other_text : e.activity_type}</td>
                       </tr>
                     );
                   })}
