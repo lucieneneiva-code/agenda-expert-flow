@@ -40,6 +40,7 @@ export default function ActivityModal({
   const [typeOther, setTypeOther] = useState(existingEntry?.type_other_text || '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showReturn, setShowReturn] = useState(false);
 
   useEffect(() => {
     if (existingEntry) {
