@@ -270,7 +270,17 @@ export default function ActivityModal({
             </button>
           ) : (
             <button
-              onClick={() => navigate('/')}
+              onClick={() => {
+                setActivityType('Visita à Escola');
+                setSchoolId('');
+                setSchoolOther('');
+                setObservation('');
+                setAgendaTopic('');
+                setLink('');
+                setTypeOther('');
+                setSaved(false);
+                setShowReturn(false);
+              }}
               className="ml-auto flex items-center gap-1.5 rounded-lg bg-accent px-6 py-2.5 text-sm font-semibold text-accent-foreground shadow-sm transition hover:opacity-90"
             >
               Retornar
