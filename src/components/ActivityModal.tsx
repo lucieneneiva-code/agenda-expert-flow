@@ -155,90 +155,94 @@ export default function ActivityModal({
               <label className="mb-1.5 block text-sm font-medium text-card-foreground">
                 Descreva a ação *
               </label>
-              <input
-                type="text"
+              <textarea
                 value={typeOther}
                 onChange={e => setTypeOther(e.target.value)}
+                rows={3}
                 placeholder="Descreva a atividade..."
-                className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
               />
             </div>
           )}
 
-          {/* School */}
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-card-foreground">
-              Escola
-            </label>
-            <select
-              value={schoolId}
-              onChange={e => setSchoolId(e.target.value)}
-              className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            >
-              <option value="">Selecione...</option>
-              {schools.map(s => (
-                <option key={s.id} value={s.id}>{s.name}</option>
-              ))}
-              <option value="outros">Outros</option>
-            </select>
-          </div>
+          {activityType === 'Visita à Escola' && (
+            <>
+              {/* School */}
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-card-foreground">
+                  Escola
+                </label>
+                <select
+                  value={schoolId}
+                  onChange={e => setSchoolId(e.target.value)}
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="">Selecione...</option>
+                  {schools.map(s => (
+                    <option key={s.id} value={s.id}>{s.name}</option>
+                  ))}
+                  <option value="outros">Outros</option>
+                </select>
+              </div>
 
-          {schoolId === 'outros' && (
-            <div>
-              <label className="mb-1.5 block text-sm font-medium text-card-foreground">
-                Nome da escola *
-              </label>
-              <input
-                type="text"
-                value={schoolOther}
-                onChange={e => setSchoolOther(e.target.value)}
-                placeholder="Informe o nome da escola..."
-                className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-            </div>
+              {schoolId === 'outros' && (
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-card-foreground">
+                    Nome da escola *
+                  </label>
+                  <input
+                    type="text"
+                    value={schoolOther}
+                    onChange={e => setSchoolOther(e.target.value)}
+                    placeholder="Informe o nome da escola..."
+                    className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
+              )}
+
+              {/* Observation */}
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-card-foreground">
+                  Observação
+                </label>
+                <textarea
+                  value={observation}
+                  onChange={e => setObservation(e.target.value)}
+                  rows={2}
+                  placeholder="Observações..."
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+                />
+              </div>
+
+              {/* Agenda Topic */}
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-card-foreground">
+                  Pauta
+                </label>
+                <input
+                  type="text"
+                  value={agendaTopic}
+                  onChange={e => setAgendaTopic(e.target.value)}
+                  placeholder="Pauta da atividade..."
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+
+              {/* Link */}
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-card-foreground">
+                  Link
+                </label>
+                <input
+                  type="url"
+                  value={link}
+                  onChange={e => setLink(e.target.value)}
+                  placeholder="https://..."
+                  className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+            </>
           )}
-
-          {/* Observation */}
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-card-foreground">
-              Observação
-            </label>
-            <textarea
-              value={observation}
-              onChange={e => setObservation(e.target.value)}
-              rows={2}
-              placeholder="Observações..."
-              className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
-            />
-          </div>
-
-          {/* Agenda Topic */}
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-card-foreground">
-              Pauta
-            </label>
-            <input
-              type="text"
-              value={agendaTopic}
-              onChange={e => setAgendaTopic(e.target.value)}
-              placeholder="Pauta da atividade..."
-              className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
-
-          {/* Link */}
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-card-foreground">
-              Link
-            </label>
-            <input
-              type="url"
-              value={link}
-              onChange={e => setLink(e.target.value)}
-              placeholder="https://..."
-              className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
         </div>
 
         {/* Actions */}
