@@ -95,12 +95,12 @@ export default function ActivityModal({
         await addEntry(data);
         toast.success('Atividade salva!');
       }
+      setSaving(false);
       setSaved(true);
       setShowReturn(true);
-    } catch {
-      // Error already handled in store
-    } finally {
+    } catch (err) {
       setSaving(false);
+      console.error('Save error:', err);
     }
   };
 
