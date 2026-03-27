@@ -126,10 +126,13 @@ export default function Dashboard() {
       const pec = PECS.find(p => p.id === e.pec_id);
       const area = AREAS.find(a => a.id === e.area_id);
       const school = SCHOOLS.find(s => s.id === e.school_id);
+      const actionDateRaw = getDayDate(e.day_id);
+      const actionDateExcel = actionDateRaw ? actionDateRaw.split('-').reverse().join('/') : '';
       return {
         PEC: pec?.name || '',
         Área: area?.name || '',
         Escola: school?.name || e.school_other_text || '',
+        'Data da Ação': actionDateExcel,
         Período: e.period === 'manha' ? 'Manhã' : 'Tarde',
         Tipo: e.activity_type === 'Outros' && e.type_other_text ? e.type_other_text : e.activity_type,
         Observação: e.observation || '',
