@@ -118,8 +118,13 @@ export default function ActivityModal({
 
   if (!open) return null;
 
+  const safeClose = () => {
+    if (saving) return;
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" onClick={safeClose}>
       <div className="fixed inset-0 bg-foreground/40" />
       <div
         className="relative z-10 w-full max-w-lg animate-slide-up rounded-t-2xl bg-card p-5 shadow-xl sm:rounded-2xl sm:m-4"
