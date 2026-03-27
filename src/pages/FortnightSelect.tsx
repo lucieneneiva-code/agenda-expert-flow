@@ -25,7 +25,7 @@ export default function FortnightSelect() {
             >
               <Calendar className="mx-auto h-6 w-6 text-primary" />
               <p className="mt-2 font-bold text-card-foreground">{f.code}</p>
-              <p className="text-xs text-muted-foreground">Quinzena {f.order}</p>
+              <p className="text-xs text-muted-foreground">{f.label}</p>
             </button>
           ))}
         </div>
