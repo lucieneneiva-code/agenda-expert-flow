@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '@/components/Header';
 import ActivityModal from '@/components/ActivityModal';
-import { AREAS, PECS, FORTNIGHTS, generateFortnightDays, getPecMeta } from '@/lib/data';
+import { AREAS, PECS, FORTNIGHTS, SCHOOLS, generateFortnightDays, getPecMeta } from '@/lib/data';
 import { useAppState } from '@/lib/store';
 import { Period, AgendaEntry } from '@/lib/types';
 import { Plus, Check } from 'lucide-react';
