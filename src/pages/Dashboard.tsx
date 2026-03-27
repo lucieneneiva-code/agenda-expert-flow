@@ -2,13 +2,25 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta } from '@/lib/data';
 import { useAppState } from '@/lib/store';
-import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock } from 'lucide-react';
+import { format } from 'date-fns';
+import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock, Trash2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import * as XLSX from 'xlsx';
 
 const COORD_PASSWORD = 'Gata@9237';
 
 export default function Dashboard() {
-  const { entries, loading } = useAppState();
+  const { entries, loading, deleteEntry } = useAppState();
   const [selectedFortnight, setSelectedFortnight] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
@@ -203,6 +215,8 @@ export default function Dashboard() {
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Escola</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Período</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Tipo</th>
+                    <th className="px-4 py-2 text-left font-medium text-muted-foreground">Preenchido em</th>
+                    <th className="px-4 py-2 text-center font-medium text-muted-foreground">Ação</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -210,6 +224,8 @@ export default function Dashboard() {
                     const pec = PECS.find(p => p.id === e.pec_id);
                     const area = AREAS.find(a => a.id === e.area_id);
                     const school = SCHOOLS.find(s => s.id === e.school_id);
+                    const createdDate = e.created_at ? format(new Date(e.created_at), 'dd/MM/yyyy') : '—';
+                    const createdTime = e.created_at ? format(new Date(e.created_at), 'HH:mm') : '';
                     return (
                       <tr key={e.id} className="border-b border-border/50 hover:bg-muted/30">
                         <td className="px-4 py-2 text-card-foreground">{pec?.name}</td>
@@ -217,6 +233,26 @@ export default function Dashboard() {
                         <td className="px-4 py-2 text-card-foreground">{school?.name || e.school_other_text || '—'}</td>
                         <td className="px-4 py-2 text-card-foreground">{e.period === 'manha' ? 'Manhã' : 'Tarde'}</td>
                         <td className="px-4 py-2 text-card-foreground">{e.activity_type === 'Outros' && e.type_other_text ? e.type_other_text : e.activity_type}</td>
+                        <td className="px-4 py-2 text-muted-foreground text-xs whitespace-nowrap">{createdDate}{createdTime ? ` às ${createdTime}` : ''}</td>
+                        <td className="px-4 py-2 text-center">
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <button className="inline-flex items-center justify-center rounded p-1 text-destructive hover:bg-destructive/10 transition" title="Apagar agendamento">
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Apagar agendamento</AlertDialogTitle>
+                                <AlertDialogDescription>Deseja realmente apagar este agendamento? Esta ação não pode ser desfeita.</AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => deleteEntry(e.id)}>Apagar</AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </td>
                       </tr>
                     );
                   })}
