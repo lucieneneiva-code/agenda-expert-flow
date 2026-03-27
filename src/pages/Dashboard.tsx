@@ -22,7 +22,9 @@ const COORD_PASSWORD = 'Gata@9237';
 export default function Dashboard() {
   const { entries, loading, deleteEntry } = useAppState();
   const [selectedFortnight, setSelectedFortnight] = useState('');
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(() => {
+    return sessionStorage.getItem('coord_auth') === 'true';
+  });
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
@@ -36,13 +38,6 @@ export default function Dashboard() {
       setPasswordError('Senha incorreta. Tente novamente.');
     }
   };
-
-  // Check session on mount
-  useState(() => {
-    if (sessionStorage.getItem('coord_auth') === 'true') {
-      setAuthenticated(true);
-    }
-  });
 
   if (!authenticated) {
     return (
