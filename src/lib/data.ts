@@ -67,7 +67,7 @@ const qualidadePecs: { name: string; meta: number | null; schools: string[] }[] 
 ];
 
 // Desenvolvimento Curricular PECs
-const curricularPecNames = ['Julio', 'Sirlene', 'Valéria', 'Marcone', 'Manoel', 'Noel', 'Roger', 'Camila', 'Janaína', 'Edilian', 'Elenilson'];
+const curricularPecNames = ['Julio', 'Sirlene', 'Valéria', 'Marcone', 'Manoel', 'Noel', 'Roger', 'Camila', 'Janaína', 'Edilian', 'Elenilson', 'Priscilla'];
 
 // Educação Especial PECs
 const especialPecNames = ['Osvaldo', 'Elaine'];
