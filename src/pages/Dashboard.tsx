@@ -2,7 +2,18 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta } from '@/lib/data';
 import { useAppState } from '@/lib/store';
-import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock } from 'lucide-react';
+import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock, Trash2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import * as XLSX from 'xlsx';
 
 const COORD_PASSWORD = 'Gata@9237';
