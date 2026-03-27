@@ -229,6 +229,19 @@ export function getPecMeta(pec: PEC, area: Area): number | null {
   return area.default_meta;
 }
 
+export function getDayDate(dayId: string): string | null {
+  // dayId format: "fortnight-{N}-day-{M}"
+  const match = dayId.match(/^fortnight-(\d+)-day-(\d+)$/);
+  if (!match) return null;
+  const fortnightOrder = parseInt(match[1], 10);
+  const dayOrder = parseInt(match[2], 10);
+  const fortnight = FORTNIGHTS.find(f => f.order === fortnightOrder);
+  if (!fortnight) return null;
+  const days = generateFortnightDays(fortnight.id, fortnightOrder);
+  const day = days.find(d => d.day_order === dayOrder);
+  return day?.date ?? null;
+}
+
 export function getSchoolsForPec(pecId: string): School[] {
   const accessIds = PEC_SCHOOL_ACCESS
     .filter(a => a.pec_id === pecId)
