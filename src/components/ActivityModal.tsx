@@ -28,7 +28,6 @@ export default function ActivityModal({
 }: ActivityModalProps) {
   const { addEntry, updateEntry, deleteEntry } = useAppState();
   const schools = getSchoolsForPec(pecId);
-  const schools = getSchoolsForPec(pecId);
 
   const [activityType, setActivityType] = useState<ActivityType>(
     existingEntry?.activity_type || 'Visita à Escola'
