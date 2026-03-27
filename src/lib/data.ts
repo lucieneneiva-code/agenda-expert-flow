@@ -157,27 +157,31 @@ export const PEC_SCHOOL_ACCESS: PecSchoolAccess[] = (() => {
   return access;
 })();
 
-// Fixed fortnight date ranges for 2026
+// Fixed fortnight date ranges for 2026 (23 quinzenas)
 const FORTNIGHT_RANGES: { start: string; end: string }[] = [
-  { start: '2026-04-06', end: '2026-04-17' },
-  { start: '2026-04-20', end: '2026-05-01' },
-  { start: '2026-05-04', end: '2026-05-15' },
-  { start: '2026-05-18', end: '2026-05-29' },
-  { start: '2026-06-01', end: '2026-06-12' },
-  { start: '2026-06-15', end: '2026-06-26' },
-  { start: '2026-06-29', end: '2026-07-10' },
-  { start: '2026-07-13', end: '2026-07-24' },
-  { start: '2026-07-27', end: '2026-08-07' },
-  { start: '2026-08-10', end: '2026-08-21' },
-  { start: '2026-08-24', end: '2026-09-04' },
-  { start: '2026-09-07', end: '2026-09-18' },
-  { start: '2026-09-21', end: '2026-10-02' },
-  { start: '2026-10-05', end: '2026-10-16' },
-  { start: '2026-10-19', end: '2026-10-30' },
-  { start: '2026-11-02', end: '2026-11-13' },
-  { start: '2026-11-16', end: '2026-11-27' },
-  { start: '2026-11-30', end: '2026-12-11' },
-  { start: '2026-12-14', end: '2026-12-25' },
+  { start: '2026-02-23', end: '2026-03-06' }, // Q1
+  { start: '2026-03-09', end: '2026-03-20' }, // Q2
+  { start: '2026-03-23', end: '2026-04-03' }, // Q3
+  { start: '2026-04-06', end: '2026-04-17' }, // Q4
+  { start: '2026-04-20', end: '2026-05-01' }, // Q5
+  { start: '2026-05-04', end: '2026-05-15' }, // Q6
+  { start: '2026-05-18', end: '2026-05-29' }, // Q7
+  { start: '2026-06-01', end: '2026-06-12' }, // Q8
+  { start: '2026-06-15', end: '2026-06-26' }, // Q9
+  { start: '2026-06-29', end: '2026-07-10' }, // Q10
+  { start: '2026-07-13', end: '2026-07-24' }, // Q11
+  { start: '2026-07-27', end: '2026-08-07' }, // Q12
+  { start: '2026-08-10', end: '2026-08-21' }, // Q13
+  { start: '2026-08-24', end: '2026-09-04' }, // Q14
+  { start: '2026-09-07', end: '2026-09-18' }, // Q15
+  { start: '2026-09-21', end: '2026-10-02' }, // Q16
+  { start: '2026-10-05', end: '2026-10-16' }, // Q17
+  { start: '2026-10-19', end: '2026-10-30' }, // Q18
+  { start: '2026-11-02', end: '2026-11-13' }, // Q19
+  { start: '2026-11-16', end: '2026-11-27' }, // Q20
+  { start: '2026-11-30', end: '2026-12-11' }, // Q21
+  { start: '2026-12-14', end: '2026-12-25' }, // Q22
+  { start: '2026-12-28', end: '2026-12-31' }, // Q23
 ];
 
 function formatDateBR(isoDate: string): string {
@@ -186,19 +190,24 @@ function formatDateBR(isoDate: string): string {
 }
 
 export const FORTNIGHTS: Fortnight[] = FORTNIGHT_RANGES.map((range, i) => {
-  const num = i + 3;
+  const num = i + 1;
   const code = `Q${num.toString().padStart(2, '0')}`;
+  const startBR = formatDateBR(range.start);
+  const endBR = formatDateBR(range.end);
+  // Display as "dd/mm" only
+  const startShort = startBR.substring(0, 5);
+  const endShort = endBR.substring(0, 5);
   return {
     id: `fortnight-${num}`,
     code,
-    label: `${code} – ${formatDateBR(range.start)} até ${formatDateBR(range.end)}`,
+    label: `Quinzena ${num} – de ${startShort} a ${endShort}`,
     order: num,
   };
 });
 
 // Generate fortnight days from the fixed date ranges (10 working days)
 export function generateFortnightDays(fortnightId: string, fortnightOrder: number): FortnightDay[] {
-  const rangeIndex = fortnightOrder - 3;
+  const rangeIndex = fortnightOrder - 1;
   const range = FORTNIGHT_RANGES[rangeIndex];
   if (!range) return [];
 
