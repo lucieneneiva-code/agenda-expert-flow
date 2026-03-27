@@ -230,6 +230,7 @@ export default function Dashboard() {
                         <td className="px-4 py-2 text-card-foreground">{area?.name}</td>
                         <td className="px-4 py-2 text-card-foreground">{school?.name || e.school_other_text || '—'}</td>
                         <td className="px-4 py-2 text-card-foreground">{e.period === 'manha' ? 'Manhã' : 'Tarde'}</td>
+                        <td className="px-4 py-2 text-card-foreground whitespace-nowrap">{actionDate}</td>
                         <td className="px-4 py-2 text-card-foreground">{e.activity_type === 'Outros' && e.type_other_text ? e.type_other_text : e.activity_type}</td>
                         <td className="px-4 py-2 text-muted-foreground text-xs whitespace-nowrap">{createdDate}{createdTime ? ` às ${createdTime}` : ''}</td>
                         <td className="px-4 py-2 text-center">
