@@ -233,5 +233,5 @@ export function getSchoolsForPec(pecId: string): School[] {
   const accessIds = PEC_SCHOOL_ACCESS
     .filter(a => a.pec_id === pecId)
     .map(a => a.school_id);
-  return SCHOOLS.filter(s => accessIds.includes(s.id));
+  return SCHOOLS.filter(s => accessIds.includes(s.id)).sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
 }
