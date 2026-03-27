@@ -90,17 +90,24 @@ export default function ActivityModal({
     try {
       if (existingEntry) {
         await updateEntry(existingEntry.id, data);
-        toast.success('Atividade atualizada!');
       } else {
         await addEntry(data);
-        toast.success('Atividade salva!');
       }
-      setSaving(false);
-      setSaved(true);
-      setShowReturn(true);
     } catch (err) {
       setSaving(false);
       console.error('Save error:', err);
+      return;
+    }
+
+    // Update UI state only after successful save, in a separate sync block
+    // to avoid race conditions with React re-renders from realtime updates
+    try {
+      setSaving(false);
+      setSaved(true);
+      setShowReturn(true);
+      toast.success(existingEntry ? 'Atividade atualizada!' : 'Atividade salva!');
+    } catch (uiErr) {
+      console.error('UI state error after save:', uiErr);
     }
   };
 
