@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '@/components/Header';
 import ActivityModal from '@/components/ActivityModal';
-import { AREAS, PECS, FORTNIGHTS, generateFortnightDays, getPecMeta } from '@/lib/data';
+import { AREAS, PECS, FORTNIGHTS, SCHOOLS, generateFortnightDays, getPecMeta } from '@/lib/data';
 import { useAppState } from '@/lib/store';
 import { Period, AgendaEntry } from '@/lib/types';
 import { Plus, Check } from 'lucide-react';
@@ -132,11 +132,13 @@ export default function AgendaView() {
                           <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                           <div className="min-w-0">
                             <p className="truncate text-xs font-medium text-card-foreground">
-                              {entry.activity_type}
+                              {entry.activity_type === 'Outros' && entry.type_other_text
+                                ? entry.type_other_text
+                                : entry.activity_type}
                             </p>
-                            {entry.school_id && (
+                            {entry.activity_type === 'Visita à Escola' && (entry.school_id || entry.school_other_text) && (
                               <p className="truncate text-[10px] text-muted-foreground">
-                                {entry.school_other_text || 'Escola'}
+                                {entry.school_other_text || SCHOOLS.find(s => s.id === entry.school_id)?.name || 'Escola'}
                               </p>
                             )}
                           </div>
