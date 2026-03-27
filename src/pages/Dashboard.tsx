@@ -20,7 +20,7 @@ import * as XLSX from 'xlsx';
 const COORD_PASSWORD = 'Gata@9237';
 
 export default function Dashboard() {
-  const { entries, loading } = useAppState();
+  const { entries, loading, deleteEntry } = useAppState();
   const [selectedFortnight, setSelectedFortnight] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
