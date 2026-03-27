@@ -38,11 +38,15 @@ export default function Dashboard() {
   };
 
   // Check session on mount
-  useState(() => {
-    if (sessionStorage.getItem('coord_auth') === 'true') {
-      setAuthenticated(true);
-    }
+  // Using a state initializer pattern with a ref to avoid useEffect
+  const [initialAuth] = useState(() => {
+    return sessionStorage.getItem('coord_auth') === 'true';
   });
+
+  // Sync initial auth state
+  if (initialAuth && !authenticated) {
+    setAuthenticated(true);
+  }
 
   if (!authenticated) {
     return (
