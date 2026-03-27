@@ -19,14 +19,16 @@ const App = () => (
       <Sonner />
       <AppProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/area/:areaId" element={<AreaPecs />} />
-            <Route path="/area/:areaId/pec/:pecId" element={<FortnightSelect />} />
-            <Route path="/area/:areaId/pec/:pecId/fortnight/:fortnightId" element={<AgendaView />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/area/:areaId" element={<AreaPecs />} />
+              <Route path="/area/:areaId/pec/:pecId" element={<FortnightSelect />} />
+              <Route path="/area/:areaId/pec/:pecId/fortnight/:fortnightId" element={<AgendaView />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </ErrorBoundary>
         </BrowserRouter>
       </AppProvider>
     </TooltipProvider>
