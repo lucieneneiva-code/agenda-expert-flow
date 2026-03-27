@@ -134,7 +134,7 @@ export default function ActivityModal({
           <h2 className="text-lg font-bold text-card-foreground">
             {existingEntry ? 'Editar Atividade' : 'Nova Atividade'}
           </h2>
-          <button onClick={onClose} className="rounded-full p-1.5 hover:bg-muted">
+          <button onClick={safeClose} className="rounded-full p-1.5 hover:bg-muted">
             <X className="h-5 w-5 text-muted-foreground" />
           </button>
         </div>
