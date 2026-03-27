@@ -159,8 +159,12 @@ export default function AgendaView() {
 
       {modalOpen && selectedCell && (
         <ActivityModal
+          key={`${selectedCell.dayId}-${selectedCell.period}`}
           open={modalOpen}
-          onClose={() => setModalOpen(false)}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedCell(null);
+          }}
           pecId={pec.id}
           areaId={area.id}
           fortnightId={fortnight.id}

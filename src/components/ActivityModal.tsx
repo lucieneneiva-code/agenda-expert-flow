@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ACTIVITY_TYPES, ActivityType, Period, AgendaEntry } from '@/lib/types';
 import { getSchoolsForPec } from '@/lib/data';
 import { useAppState } from '@/lib/store';
@@ -28,7 +27,6 @@ export default function ActivityModal({
   existingEntry,
 }: ActivityModalProps) {
   const { addEntry, updateEntry, deleteEntry } = useAppState();
-  const navigate = useNavigate();
   const schools = getSchoolsForPec(pecId);
 
   const [activityType, setActivityType] = useState<ActivityType>(
@@ -120,8 +118,13 @@ export default function ActivityModal({
 
   if (!open) return null;
 
+  const safeClose = () => {
+    if (saving) return;
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" onClick={safeClose}>
       <div className="fixed inset-0 bg-foreground/40" />
       <div
         className="relative z-10 w-full max-w-lg animate-slide-up rounded-t-2xl bg-card p-5 shadow-xl sm:rounded-2xl sm:m-4"
@@ -131,7 +134,7 @@ export default function ActivityModal({
           <h2 className="text-lg font-bold text-card-foreground">
             {existingEntry ? 'Editar Atividade' : 'Nova Atividade'}
           </h2>
-          <button onClick={onClose} className="rounded-full p-1.5 hover:bg-muted">
+          <button onClick={safeClose} className="rounded-full p-1.5 hover:bg-muted">
             <X className="h-5 w-5 text-muted-foreground" />
           </button>
         </div>
