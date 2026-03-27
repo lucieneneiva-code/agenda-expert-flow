@@ -209,6 +209,7 @@ export default function Dashboard() {
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Área</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Escola</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Período</th>
+                    <th className="px-4 py-2 text-left font-medium text-muted-foreground">Data da Ação</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Tipo</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Preenchido em</th>
                     <th className="px-4 py-2 text-center font-medium text-muted-foreground">Ação</th>
@@ -220,6 +221,8 @@ export default function Dashboard() {
                     const area = AREAS.find(a => a.id === e.area_id);
                     const school = SCHOOLS.find(s => s.id === e.school_id);
                     const createdDate = e.created_at ? format(new Date(e.created_at), 'dd/MM/yyyy') : '—';
+                    const actionDateRaw = getDayDate(e.day_id);
+                    const actionDate = actionDateRaw ? actionDateRaw.split('-').reverse().join('/') : '—';
                     const createdTime = e.created_at ? format(new Date(e.created_at), 'HH:mm') : '';
                     return (
                       <tr key={e.id} className="border-b border-border/50 hover:bg-muted/30">
