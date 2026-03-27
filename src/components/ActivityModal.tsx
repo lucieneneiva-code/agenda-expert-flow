@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ACTIVITY_TYPES, ActivityType, Period, AgendaEntry } from '@/lib/types';
 import { getSchoolsForPec } from '@/lib/data';
 import { useAppState } from '@/lib/store';
