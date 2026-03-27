@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
-import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta } from '@/lib/data';
+import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta, getDayDate } from '@/lib/data';
 import { useAppState } from '@/lib/store';
 import { format } from 'date-fns';
 import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock, Trash2 } from 'lucide-react';
@@ -126,10 +126,13 @@ export default function Dashboard() {
       const pec = PECS.find(p => p.id === e.pec_id);
       const area = AREAS.find(a => a.id === e.area_id);
       const school = SCHOOLS.find(s => s.id === e.school_id);
+      const actionDateRaw = getDayDate(e.day_id);
+      const actionDateExcel = actionDateRaw ? actionDateRaw.split('-').reverse().join('/') : '';
       return {
         PEC: pec?.name || '',
         Área: area?.name || '',
         Escola: school?.name || e.school_other_text || '',
+        'Data da Ação': actionDateExcel,
         Período: e.period === 'manha' ? 'Manhã' : 'Tarde',
         Tipo: e.activity_type === 'Outros' && e.type_other_text ? e.type_other_text : e.activity_type,
         Observação: e.observation || '',
@@ -209,6 +212,7 @@ export default function Dashboard() {
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Área</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Escola</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Período</th>
+                    <th className="px-4 py-2 text-left font-medium text-muted-foreground">Data da Ação</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Tipo</th>
                     <th className="px-4 py-2 text-left font-medium text-muted-foreground">Preenchido em</th>
                     <th className="px-4 py-2 text-center font-medium text-muted-foreground">Ação</th>
@@ -220,6 +224,8 @@ export default function Dashboard() {
                     const area = AREAS.find(a => a.id === e.area_id);
                     const school = SCHOOLS.find(s => s.id === e.school_id);
                     const createdDate = e.created_at ? format(new Date(e.created_at), 'dd/MM/yyyy') : '—';
+                    const actionDateRaw = getDayDate(e.day_id);
+                    const actionDate = actionDateRaw ? actionDateRaw.split('-').reverse().join('/') : '—';
                     const createdTime = e.created_at ? format(new Date(e.created_at), 'HH:mm') : '';
                     return (
                       <tr key={e.id} className="border-b border-border/50 hover:bg-muted/30">
@@ -227,6 +233,7 @@ export default function Dashboard() {
                         <td className="px-4 py-2 text-card-foreground">{area?.name}</td>
                         <td className="px-4 py-2 text-card-foreground">{school?.name || e.school_other_text || '—'}</td>
                         <td className="px-4 py-2 text-card-foreground">{e.period === 'manha' ? 'Manhã' : 'Tarde'}</td>
+                        <td className="px-4 py-2 text-card-foreground whitespace-nowrap">{actionDate}</td>
                         <td className="px-4 py-2 text-card-foreground">{e.activity_type === 'Outros' && e.type_other_text ? e.type_other_text : e.activity_type}</td>
                         <td className="px-4 py-2 text-muted-foreground text-xs whitespace-nowrap">{createdDate}{createdTime ? ` às ${createdTime}` : ''}</td>
                         <td className="px-4 py-2 text-center">
