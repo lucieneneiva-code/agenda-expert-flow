@@ -94,7 +94,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addEntry = useCallback(async (entry: Omit<AgendaEntry, 'id' | 'created_at' | 'updated_at'>) => {
-    const { error } = await supabase.from('agenda_entries').insert({
+    const { data, error } = await supabase.from('agenda_entries').insert({
       pec_id: entry.pec_id,
       area_id: entry.area_id,
       fortnight_id: entry.fortnight_id,
@@ -107,7 +107,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       agenda_topic: entry.agenda_topic,
       link: entry.link,
       type_other_text: entry.type_other_text,
-    });
+    }).select();
 
     if (error) {
       console.error('Error adding entry:', error);
@@ -118,6 +118,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
       throw error;
     }
+    // Return successfully - data confirmed by select()
+    return data;
   }, []);
 
   const updateEntry = useCallback(async (id: string, updates: Partial<AgendaEntry>) => {
