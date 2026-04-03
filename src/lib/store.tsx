@@ -6,8 +6,8 @@ import { toast } from 'sonner';
 interface AppState {
   entries: AgendaEntry[];
   loading: boolean;
-  addEntry: (entry: Omit<AgendaEntry, 'id' | 'created_at' | 'updated_at'>) => Promise<void>;
-  updateEntry: (id: string, updates: Partial<AgendaEntry>) => Promise<void>;
+  addEntry: (entry: Omit<AgendaEntry, 'id' | 'created_at' | 'updated_at'>) => Promise<any>;
+  updateEntry: (id: string, updates: Partial<AgendaEntry>) => Promise<any>;
   deleteEntry: (id: string) => Promise<void>;
   getEntriesForCell: (pecId: string, fortnightId: string, dayId: string, period: Period) => AgendaEntry[];
   getEntriesForPecFortnight: (pecId: string, fortnightId: string) => AgendaEntry[];
