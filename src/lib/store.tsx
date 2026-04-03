@@ -124,16 +124,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const updateEntry = useCallback(async (id: string, updates: Partial<AgendaEntry>) => {
     const { id: _, created_at, updated_at, ...cleanUpdates } = updates as any;
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('agenda_entries')
       .update(cleanUpdates)
-      .eq('id', id);
+      .eq('id', id)
+      .select();
 
     if (error) {
       console.error('Error updating entry:', error);
       toast.error('Erro ao atualizar atividade.');
       throw error;
     }
+    return data;
   }, []);
 
   const deleteEntry = useCallback(async (id: string) => {
