@@ -6,8 +6,8 @@ import { toast } from 'sonner';
 interface AppState {
   entries: AgendaEntry[];
   loading: boolean;
-  addEntry: (entry: Omit<AgendaEntry, 'id' | 'created_at' | 'updated_at'>) => Promise<void>;
-  updateEntry: (id: string, updates: Partial<AgendaEntry>) => Promise<void>;
+  addEntry: (entry: Omit<AgendaEntry, 'id' | 'created_at' | 'updated_at'>) => Promise<any>;
+  updateEntry: (id: string, updates: Partial<AgendaEntry>) => Promise<any>;
   deleteEntry: (id: string) => Promise<void>;
   getEntriesForCell: (pecId: string, fortnightId: string, dayId: string, period: Period) => AgendaEntry[];
   getEntriesForPecFortnight: (pecId: string, fortnightId: string) => AgendaEntry[];
@@ -94,7 +94,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addEntry = useCallback(async (entry: Omit<AgendaEntry, 'id' | 'created_at' | 'updated_at'>) => {
-    const { error } = await supabase.from('agenda_entries').insert({
+    const { data, error } = await supabase.from('agenda_entries').insert({
       pec_id: entry.pec_id,
       area_id: entry.area_id,
       fortnight_id: entry.fortnight_id,
@@ -107,7 +107,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       agenda_topic: entry.agenda_topic,
       link: entry.link,
       type_other_text: entry.type_other_text,
-    });
+    }).select();
 
     if (error) {
       console.error('Error adding entry:', error);
@@ -118,20 +118,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
       throw error;
     }
+    // Return successfully - data confirmed by select()
+    return data;
   }, []);
 
   const updateEntry = useCallback(async (id: string, updates: Partial<AgendaEntry>) => {
     const { id: _, created_at, updated_at, ...cleanUpdates } = updates as any;
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('agenda_entries')
       .update(cleanUpdates)
-      .eq('id', id);
+      .eq('id', id)
+      .select();
 
     if (error) {
       console.error('Error updating entry:', error);
       toast.error('Erro ao atualizar atividade.');
       throw error;
     }
+    return data;
   }, []);
 
   const deleteEntry = useCallback(async (id: string) => {
