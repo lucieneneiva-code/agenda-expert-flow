@@ -99,13 +99,28 @@ export default function Dashboard() {
   const pecsWithEntries = new Set(filteredEntries.map(e => e.pec_id));
   const pecsWithoutAgenda = PECS.filter(p => p.active && !pecsWithEntries.has(p.id));
 
-  const pecsBelowMeta = PECS.filter(p => {
+  // Calculate meta per-fortnight: if a specific fortnight is selected, check that one;
+  // otherwise check each fortnight individually
+  const fortnightsToCheck = selectedFortnight
+    ? FORTNIGHTS.filter(f => f.id === selectedFortnight)
+    : FORTNIGHTS.filter(f => entries.some(e => e.fortnight_id === f.id));
+
+  const pecsBelowMeta: { pec: typeof PECS[0]; visited: number; meta: number; fortnightLabel: string }[] = [];
+  
+  PECS.forEach(p => {
     const area = AREAS.find(a => a.id === p.area_id);
-    if (!area) return false;
+    if (!area) return;
     const meta = getPecMeta(p, area);
-    if (meta === null) return false;
-    const pecVisits = visits.filter(e => e.pec_id === p.id).length;
-    return pecVisits < meta;
+    if (meta === null) return;
+
+    fortnightsToCheck.forEach(f => {
+      const pecVisitsInFortnight = entries.filter(
+        e => e.pec_id === p.id && e.fortnight_id === f.id && e.activity_type === 'Visita à Escola'
+      ).length;
+      if (pecVisitsInFortnight < meta) {
+        pecsBelowMeta.push({ pec: p, visited: pecVisitsInFortnight, meta, fortnightLabel: f.code });
+      }
+    });
   });
 
   const schoolsNotVisitedList = SCHOOLS.filter(s => !visitedSchoolIds.has(s.id));
@@ -118,7 +133,7 @@ export default function Dashboard() {
     { label: 'Escolas Visitadas', value: schoolsVisited, icon: School, color: 'text-success' },
     { label: 'Escolas Não Visitadas', value: schoolsNotVisited, icon: School, color: 'text-warning' },
     { label: 'PEC sem Agenda', value: pecsWithoutAgenda.length, icon: Users, color: 'text-destructive' },
-    { label: 'PEC Abaixo da Meta', value: pecsBelowMeta.length, icon: AlertTriangle, color: 'text-warning' },
+    { label: 'PEC Abaixo da Meta', value: new Set(pecsBelowMeta.map(i => i.pec.id)).size, icon: AlertTriangle, color: 'text-warning' },
   ];
 
   const exportExcel = () => {
@@ -283,16 +298,11 @@ export default function Dashboard() {
           <div className="mb-4 rounded-xl bg-card shadow-card p-4">
             <h3 className="font-semibold text-card-foreground mb-2">PECs Abaixo da Meta</h3>
             <div className="flex flex-wrap gap-2">
-              {pecsBelowMeta.map(p => {
-                const area = AREAS.find(a => a.id === p.area_id);
-                const meta = area ? getPecMeta(p, area) : null;
-                const v = visits.filter(e => e.pec_id === p.id).length;
-                return (
-                  <span key={p.id} className="rounded-full bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
-                    {p.name} ({v}/{meta})
+              {pecsBelowMeta.map((item, idx) => (
+                  <span key={`${item.pec.id}-${item.fortnightLabel}-${idx}`} className="rounded-full bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
+                    {item.pec.name} ({item.visited}/{item.meta}) – {item.fortnightLabel}
                   </span>
-                );
-              })}
+              ))}
             </div>
           </div>
         )}
