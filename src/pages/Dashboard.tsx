@@ -105,7 +105,8 @@ export default function Dashboard() {
     ? FORTNIGHTS.filter(f => f.id === selectedFortnight)
     : FORTNIGHTS.filter(f => entries.some(e => e.fortnight_id === f.id));
 
-  const pecsBelowMeta: { pec: typeof PECS[0]; visited: number; meta: number; fortnightLabel: string }[] = [];
+  type MetaItem = { pec: typeof PECS[0]; visited: number; meta: number; fortnightLabel: string; fortnightId: string; status: 'Atingida' | 'Pendente' | 'Acima da meta' };
+  const pecsMetaByFortnight: MetaItem[] = [];
   
   PECS.forEach(p => {
     const area = AREAS.find(a => a.id === p.area_id);
@@ -117,11 +118,12 @@ export default function Dashboard() {
       const pecVisitsInFortnight = entries.filter(
         e => e.pec_id === p.id && e.fortnight_id === f.id && e.activity_type === 'Visita à Escola'
       ).length;
-      if (pecVisitsInFortnight < meta) {
-        pecsBelowMeta.push({ pec: p, visited: pecVisitsInFortnight, meta, fortnightLabel: f.code });
-      }
+      const status: MetaItem['status'] = pecVisitsInFortnight > meta ? 'Acima da meta' : pecVisitsInFortnight === meta ? 'Atingida' : 'Pendente';
+      pecsMetaByFortnight.push({ pec: p, visited: pecVisitsInFortnight, meta, fortnightLabel: f.code, fortnightId: f.id, status });
     });
   });
+
+  const pecsBelowMeta = pecsMetaByFortnight.filter(i => i.status === 'Pendente');
 
   const schoolsNotVisitedList = SCHOOLS.filter(s => !visitedSchoolIds.has(s.id));
 
