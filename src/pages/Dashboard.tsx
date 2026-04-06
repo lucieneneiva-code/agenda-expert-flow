@@ -298,16 +298,11 @@ export default function Dashboard() {
           <div className="mb-4 rounded-xl bg-card shadow-card p-4">
             <h3 className="font-semibold text-card-foreground mb-2">PECs Abaixo da Meta</h3>
             <div className="flex flex-wrap gap-2">
-              {pecsBelowMeta.map(p => {
-                const area = AREAS.find(a => a.id === p.area_id);
-                const meta = area ? getPecMeta(p, area) : null;
-                const v = visits.filter(e => e.pec_id === p.id).length;
-                return (
-                  <span key={p.id} className="rounded-full bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
-                    {p.name} ({v}/{meta})
+              {pecsBelowMeta.map((item, idx) => (
+                  <span key={`${item.pec.id}-${item.fortnightLabel}-${idx}`} className="rounded-full bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
+                    {item.pec.name} ({item.visited}/{item.meta}) – {item.fortnightLabel}
                   </span>
-                );
-              })}
+              ))}
             </div>
           </div>
         )}
