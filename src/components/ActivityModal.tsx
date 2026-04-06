@@ -65,6 +65,7 @@ export default function ActivityModal({
   };
 
   const handleSave = async () => {
+    if (saving) return; // prevent double submit
     const error = validate();
     if (error) {
       toast.error(error);
@@ -93,21 +94,14 @@ export default function ActivityModal({
       } else {
         await addEntry(data);
       }
-    } catch (err) {
-      setSaving(false);
-      console.error('Save error:', err);
-      return;
-    }
-
-    // Update UI state only after successful save, in a separate sync block
-    // to avoid race conditions with React re-renders from realtime updates
-    try {
+      toast.success(existingEntry ? 'Atividade atualizada!' : 'Atividade salva!');
       setSaving(false);
       setSaved(true);
       setShowReturn(true);
-      toast.success(existingEntry ? 'Atividade atualizada!' : 'Atividade salva!');
-    } catch (uiErr) {
-      console.error('UI state error after save:', uiErr);
+    } catch (err) {
+      setSaving(false);
+      console.error('Save error:', err);
+      // Error toast is already shown by addEntry/updateEntry in store
     }
   };
 
