@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta, getDayDate } from '@/lib/data';
 import { useAppState } from '@/lib/store';
 import { format } from 'date-fns';
-import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock, Trash2 } from 'lucide-react';
+import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock, Trash2, Target } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
