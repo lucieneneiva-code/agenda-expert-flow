@@ -133,7 +133,7 @@ export default function Dashboard() {
     { label: 'Escolas Visitadas', value: schoolsVisited, icon: School, color: 'text-success' },
     { label: 'Escolas Não Visitadas', value: schoolsNotVisited, icon: School, color: 'text-warning' },
     { label: 'PEC sem Agenda', value: pecsWithoutAgenda.length, icon: Users, color: 'text-destructive' },
-    { label: 'PEC Abaixo da Meta', value: pecsBelowMeta.length, icon: AlertTriangle, color: 'text-warning' },
+    { label: 'PEC Abaixo da Meta', value: new Set(pecsBelowMeta.map(i => i.pec.id)).size, icon: AlertTriangle, color: 'text-warning' },
   ];
 
   const exportExcel = () => {
