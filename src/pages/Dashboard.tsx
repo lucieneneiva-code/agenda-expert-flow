@@ -309,7 +309,55 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Schools not visited */}
+        {/* Meta por Quinzena */}
+        {pecsMetaByFortnight.length > 0 && (
+          <div className="mb-4 rounded-xl bg-card shadow-card overflow-hidden">
+            <div className="px-4 py-3 border-b border-border flex items-center gap-2">
+              <Target className="h-4 w-4 text-primary" />
+              <h3 className="font-semibold text-card-foreground">Meta por Quinzena</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border bg-muted/50">
+                    <th className="px-4 py-2 text-left font-medium text-muted-foreground">PEC</th>
+                    <th className="px-4 py-2 text-left font-medium text-muted-foreground">Área</th>
+                    <th className="px-4 py-2 text-center font-medium text-muted-foreground">Quinzena</th>
+                    <th className="px-4 py-2 text-center font-medium text-muted-foreground">Meta</th>
+                    <th className="px-4 py-2 text-center font-medium text-muted-foreground">Realizado</th>
+                    <th className="px-4 py-2 text-center font-medium text-muted-foreground">Situação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pecsMetaByFortnight.map((item, idx) => {
+                    const area = AREAS.find(a => a.id === item.pec.area_id);
+                    const statusColor = item.status === 'Atingida'
+                      ? 'text-success bg-success/10'
+                      : item.status === 'Acima da meta'
+                        ? 'text-primary bg-primary/10'
+                        : 'text-warning bg-warning/10';
+                    return (
+                      <tr key={`meta-${item.pec.id}-${item.fortnightId}-${idx}`} className="border-b border-border/50 hover:bg-muted/30">
+                        <td className="px-4 py-2 text-card-foreground font-medium">{item.pec.name}</td>
+                        <td className="px-4 py-2 text-card-foreground">{area?.name || ''}</td>
+                        <td className="px-4 py-2 text-center text-card-foreground">{item.fortnightLabel}</td>
+                        <td className="px-4 py-2 text-center text-card-foreground font-semibold">{item.meta}</td>
+                        <td className="px-4 py-2 text-center text-card-foreground font-semibold">{item.visited}</td>
+                        <td className="px-4 py-2 text-center">
+                          <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusColor}`}>
+                            {item.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+
         {schoolsNotVisitedList.length > 0 && (
           <div className="rounded-xl bg-card shadow-card p-4">
             <h3 className="font-semibold text-card-foreground mb-2">
