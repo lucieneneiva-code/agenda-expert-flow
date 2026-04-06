@@ -99,13 +99,28 @@ export default function Dashboard() {
   const pecsWithEntries = new Set(filteredEntries.map(e => e.pec_id));
   const pecsWithoutAgenda = PECS.filter(p => p.active && !pecsWithEntries.has(p.id));
 
-  const pecsBelowMeta = PECS.filter(p => {
+  // Calculate meta per-fortnight: if a specific fortnight is selected, check that one;
+  // otherwise check each fortnight individually
+  const fortnightsToCheck = selectedFortnight
+    ? FORTNIGHTS.filter(f => f.id === selectedFortnight)
+    : FORTNIGHTS.filter(f => entries.some(e => e.fortnight_id === f.id));
+
+  const pecsBelowMeta: { pec: typeof PECS[0]; visited: number; meta: number; fortnightLabel: string }[] = [];
+  
+  PECS.forEach(p => {
     const area = AREAS.find(a => a.id === p.area_id);
-    if (!area) return false;
+    if (!area) return;
     const meta = getPecMeta(p, area);
-    if (meta === null) return false;
-    const pecVisits = visits.filter(e => e.pec_id === p.id).length;
-    return pecVisits < meta;
+    if (meta === null) return;
+
+    fortnightsToCheck.forEach(f => {
+      const pecVisitsInFortnight = entries.filter(
+        e => e.pec_id === p.id && e.fortnight_id === f.id && e.activity_type === 'Visita à Escola'
+      ).length;
+      if (pecVisitsInFortnight < meta) {
+        pecsBelowMeta.push({ pec: p, visited: pecVisitsInFortnight, meta, fortnightLabel: f.code });
+      }
+    });
   });
 
   const schoolsNotVisitedList = SCHOOLS.filter(s => !visitedSchoolIds.has(s.id));
