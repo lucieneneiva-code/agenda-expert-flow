@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ACTIVITY_TYPES, ActivityType, Period, AgendaEntry } from '@/lib/types';
+import { ACTIVITY_TYPES, RECOMPOSICAO_ACTIVITY_TYPES, ActivityType, Period, AgendaEntry } from '@/lib/types';
 import { getSchoolsForPec } from '@/lib/data';
 import { useAppState } from '@/lib/store';
 import { X, Save, Trash2, Check, Loader2 } from 'lucide-react';
@@ -28,6 +28,7 @@ export default function ActivityModal({
 }: ActivityModalProps) {
   const { addEntry, updateEntry, deleteEntry } = useAppState();
   const schools = getSchoolsForPec(pecId);
+  const activityTypes = areaId === 'recomposicao' ? RECOMPOSICAO_ACTIVITY_TYPES : ACTIVITY_TYPES;
 
   const [activityType, setActivityType] = useState<ActivityType>(
     existingEntry?.activity_type || 'Visita à Escola'
@@ -151,7 +152,7 @@ export default function ActivityModal({
               onChange={e => setActivityType(e.target.value as ActivityType)}
               className="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
-              {ACTIVITY_TYPES.map(t => (
+              {activityTypes.map(t => (
                 <option key={t} value={t}>{t}</option>
               ))}
             </select>
