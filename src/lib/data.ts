@@ -124,9 +124,9 @@ export const PECS: PEC[] = [
     active: true,
   })),
   // Recomposição
-  ...recomposicaoPecNames.map((name, i) => ({
+  ...recomposicaoPecs.map((p, i) => ({
     id: `pec-rc-${i + 1}`,
-    name,
+    name: p.name,
     area_id: 'recomposicao',
     custom_meta: null,
     active: true,
@@ -150,10 +150,19 @@ export const PEC_SCHOOL_ACCESS: PecSchoolAccess[] = (() => {
     }
   });
   
-  // All PECs from curricular, especial, conviva, multiplica, recomposicao get access to all schools
-  const allSchoolAreaPrefixes = ['pec-dc-', 'pec-ee-', 'pec-cv-', 'pec-mp-', 'pec-rc-'];
+  // All PECs from curricular, especial, conviva, multiplica get access to all schools
+  const allSchoolAreaPrefixes = ['pec-dc-', 'pec-ee-', 'pec-cv-', 'pec-mp-'];
   PECS.filter(p => allSchoolAreaPrefixes.some(prefix => p.id.startsWith(prefix))).forEach(pec => {
     SCHOOLS.forEach(s => access.push({ pec_id: pec.id, school_id: s.id }));
+  });
+
+  // Recomposição PECs get specific schools
+  recomposicaoPecs.forEach((p, i) => {
+    const pecId = `pec-rc-${i + 1}`;
+    p.schools.forEach(schoolName => {
+      const school = SCHOOLS.find(s => s.name === schoolName);
+      if (school) access.push({ pec_id: pecId, school_id: school.id });
+    });
   });
   
   return access;
