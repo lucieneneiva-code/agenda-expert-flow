@@ -4,6 +4,8 @@ import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta, getDayDate } from '@/lib/
 import { useAppState } from '@/lib/store';
 import { format } from 'date-fns';
 import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock, Trash2, Target } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import QAMonitoring from '@/components/QAMonitoring';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -167,6 +169,17 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <Header title="Painel da Coordenação" subtitle="Indicadores e relatórios" showBack />
       <main className="container mx-auto max-w-5xl px-4 py-6">
+        <Tabs defaultValue="geral" className="w-full">
+          <TabsList className="mb-6 w-full justify-start">
+            <TabsTrigger value="geral">Visão Geral</TabsTrigger>
+            <TabsTrigger value="qa">Monitoramento PEC Qualidade da Aula</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="qa">
+            <QAMonitoring />
+          </TabsContent>
+
+          <TabsContent value="geral">
         {/* Filter */}
         <div className="mb-6 flex items-center gap-3">
           <Filter className="h-4 w-4 text-muted-foreground" />
@@ -372,6 +385,8 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
