@@ -43,9 +43,22 @@ export type Period = 'manha' | 'tarde';
 
 export type ActivityType =
   | 'Visita à Escola'
+  | 'Recomposição de Habilidades'
+  | 'Análise de Dados de Aprendizagem'
+  | 'Planejamento de Intervenção Pedagógica'
+  | 'Apoio ao CGP'
   | 'Outros';
 
 export const ACTIVITY_TYPES: ActivityType[] = [
+  'Visita à Escola',
+  'Outros',
+];
+
+export const RECOMPOSICAO_ACTIVITY_TYPES: ActivityType[] = [
+  'Recomposição de Habilidades',
+  'Análise de Dados de Aprendizagem',
+  'Planejamento de Intervenção Pedagógica',
+  'Apoio ao CGP',
   'Visita à Escola',
   'Outros',
 ];
