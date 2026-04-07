@@ -10,12 +10,12 @@ export const AREAS: Area[] = [
 ];
 
 // IDs of areas to show on the home screen
-export const HOME_AREA_IDS = ['qualidade', 'curricular', 'especial', 'conviva', 'multiplica'];
+export const HOME_AREA_IDS = ['qualidade', 'curricular', 'especial', 'conviva', 'multiplica', 'recomposicao'];
 
 // Schools
 const schoolNames = [
   'AURELIO CAMPOS', 'ELOELY NAMBU', 'JAYR DE ANDRADE', 'JERONYMO MONTEIRO',
-  'JORGE SARAIVA', 'MADRE DOMINEUC', 'NEIVA DE LOURDES', 'VICENTE DE PAULO',
+  'JORGE SARAIVA', 'MADRE MARIE DOMINEUC', 'NEIVA DE LOURDES', 'VICENTE DE PAULO',
   'ADA PELLEGRINI', 'ANTONIO CANDIDO', 'HOMERO VAZ', 'JOSE XAVIER',
   'LEONEL BRIZOLA', 'GAIVOTAS II', 'OTONIEL ASSIS', 'SAVERIO',
   'ERNESTO NAZARETH', 'AFRANIO', 'ALBERTO SALOTTI', 'ARGEO PINTO',
@@ -50,19 +50,19 @@ export const SCHOOLS: School[] = schoolNames.map((name, i) => ({
 
 // PECs for Qualidade da Aula
 const qualidadePecs: { name: string; meta: number | null; schools: string[] }[] = [
-  { name: 'Aline', meta: null, schools: ['AURELIO CAMPOS', 'ELOELY NAMBU', 'JAYR DE ANDRADE', 'JERONYMO MONTEIRO', 'JORGE SARAIVA', 'MADRE DOMINEUC', 'NEIVA DE LOURDES', 'VICENTE DE PAULO'] },
+  { name: 'Aline', meta: null, schools: ['AURELIO CAMPOS', 'ELOELY NAMBU', 'JAYR DE ANDRADE', 'JERONYMO MONTEIRO', 'JORGE SARAIVA', 'MADRE MARIE DOMINEUC', 'NEIVA DE LOURDES', 'VICENTE DE PAULO'] },
   { name: 'Caroline', meta: null, schools: ['ADA PELLEGRINI', 'ANTONIO CANDIDO', 'HOMERO VAZ', 'JOSE XAVIER', 'LEONEL BRIZOLA', 'GAIVOTAS II', 'OTONIEL ASSIS', 'SAVERIO'] },
-  { name: 'Dalila', meta: 9, schools: ['ERNESTO NAZARETH', 'AFRANIO', 'ALBERTO SALOTTI', 'ARGEO PINTO', 'ERODICE', 'JUVENTINA', 'ROBERTO MANGE', 'SERGIO RADUAN', 'WASHINGTON NATEL'] },
+  { name: 'DALILLA', meta: 9, schools: ['ERNESTO NAZARETH', 'AFRANIO', 'ALBERTO SALOTTI', 'ARGEO PINTO', 'ERODICE', 'JUVENTINA', 'ROBERTO MANGE', 'SERGIO RADUAN', 'WASHINGTON NATEL'] },
   { name: 'Magali', meta: 9, schools: ['ADELAIDE ROSA', 'VALDIR CONCEIÇÃO', 'EMILIO WARWICK', 'EURIPEDES', 'FRANCISCO ROSWELL', 'HEITOR VILLA', 'IRMA CHARLITA', 'JARDIM NORONHA', 'MARLENE ADUA'] },
   { name: 'Noemi', meta: 7, schools: ['BEATRIZ LOPES', 'CALHIM ABUD', 'FRANCISCO JOAO', 'JOSE DUARTE', 'JOSE GERALDO', 'LAERTE RAMOS', 'TANCREDO'] },
   { name: 'Helaine', meta: null, schools: ['ANA LUIZA', 'CARLOS CATTONY', 'DAVID ZEIGER', 'JESUS ATTAB', 'LUCAS RASQUINHO', 'MARIA SINISGALLI', 'MARISTELA', 'PRISCILIANA'] },
   { name: 'Fabiano', meta: null, schools: ['BENEDITO CELIO', 'BENEDITO FERREIRA', 'CLAUDIRENE', 'DUARTE LEOPOLDO', 'GIULIO LEONE', 'HERBERT BALDUS', 'HERMINIO', 'MARIAZINHA'] },
-  { name: 'Verônica', meta: 7, schools: ['ADOLFO CASAIS', 'CALLIA', 'CONDOMINIO VARGEM', 'LEDA GUIMARAES', 'PAULINO', 'PERILLIER', 'REGINA MIRANDA'] },
+  { name: 'Verônica', meta: 7, schools: ['CHRISTIANO ALTENFELDER', 'CALLIA', 'CONDOMINIO VARGEM', 'LEDA GUIMARAES', 'PAULINO', 'PERILLIER', 'REGINA MIRANDA'] },
   { name: 'Gislaine', meta: 7, schools: ['ANTONIO PEREIRA', 'CLARICE IKEDA', 'LEVI CARNEIRO', 'MARIA AMELIA', 'MARIA JUVENAL', 'MARIO LOPES', 'SANTO DIAS'] },
   { name: 'Edilene', meta: 7, schools: ['ADRIAO BERNARDES', 'CARLOS AYRES', 'CARLOS MORAES', 'ESTHER', 'MARIO ARMINANTE', 'SAMUEL WAINER', 'VERA ATHAYDE'] },
   { name: 'Silvia', meta: null, schools: ['ALEXANDRE ANSALDO', 'CANDIDO OLIVEIRA', 'EVANDRO LINS', 'ITIRO MUTO', 'JACOB', 'JOAO GOULART', 'JOSE BENTO', 'RENE MUAWAD'] },
   { name: 'Marjorie', meta: null, schools: ['ALEXANDRE MARCONDES', 'ANA MARIA', 'ANIZ BADRA', 'AYRTON SENNA', 'ITURBIDES', 'NAIR DAMIAO', 'ROSSINE', 'VICENTINA'] },
-  { name: 'Evelyn', meta: null, schools: ['CHRISTIANO ALTENFELDER', 'HILTON REIS', 'ILDA VIEIRA', 'JOAQUIM ALVARES', 'JOSE EPHIM', 'JOSE VIEIRA', 'LEONOR', 'MARIA LUIZA ROQUE'] },
+  { name: 'Evelyn', meta: null, schools: ['ADOLFO CASAIS', 'HILTON REIS', 'ILDA VIEIRA', 'JOAQUIM ALVARES', 'JOSE EPHIM', 'JOSE VIEIRA', 'LEONOR', 'MARIA LUIZA ROQUE'] },
   { name: 'Camila', meta: null, schools: [] }, // all schools
 ];
 
@@ -79,7 +79,9 @@ const convivaPecNames = ['Márcia', 'Maria Caroline'];
 const multiplicaPecNames = ['Danila', 'Rosemari'];
 
 // Recomposição PECs
-const recomposicaoPecNames = ['Rodrigo'];
+const recomposicaoPecs: { name: string; schools: string[] }[] = [
+  { name: 'Rodrigo', schools: ['BENEDITO CELIO', 'CALHIM ABUD', 'ERODICE', 'HERBERT BALDUS', 'HERMINIO', 'JUVENTINA', 'LEVI CARNEIRO', 'HEITOR VILLA', 'MARIA AMELIA', 'MARIA SINISGALLI'] },
+];
 
 export const PECS: PEC[] = [
   ...qualidadePecs.map((p, i) => ({
@@ -122,9 +124,9 @@ export const PECS: PEC[] = [
     active: true,
   })),
   // Recomposição
-  ...recomposicaoPecNames.map((name, i) => ({
+  ...recomposicaoPecs.map((p, i) => ({
     id: `pec-rc-${i + 1}`,
-    name,
+    name: p.name,
     area_id: 'recomposicao',
     custom_meta: null,
     active: true,
@@ -148,10 +150,19 @@ export const PEC_SCHOOL_ACCESS: PecSchoolAccess[] = (() => {
     }
   });
   
-  // All PECs from curricular, especial, conviva, multiplica, recomposicao get access to all schools
-  const allSchoolAreaPrefixes = ['pec-dc-', 'pec-ee-', 'pec-cv-', 'pec-mp-', 'pec-rc-'];
+  // All PECs from curricular, especial, conviva, multiplica get access to all schools
+  const allSchoolAreaPrefixes = ['pec-dc-', 'pec-ee-', 'pec-cv-', 'pec-mp-'];
   PECS.filter(p => allSchoolAreaPrefixes.some(prefix => p.id.startsWith(prefix))).forEach(pec => {
     SCHOOLS.forEach(s => access.push({ pec_id: pec.id, school_id: s.id }));
+  });
+
+  // Recomposição PECs get specific schools
+  recomposicaoPecs.forEach((p, i) => {
+    const pecId = `pec-rc-${i + 1}`;
+    p.schools.forEach(schoolName => {
+      const school = SCHOOLS.find(s => s.name === schoolName);
+      if (school) access.push({ pec_id: pecId, school_id: school.id });
+    });
   });
   
   return access;
