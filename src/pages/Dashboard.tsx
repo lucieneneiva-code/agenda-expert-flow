@@ -4,6 +4,8 @@ import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta, getDayDate } from '@/lib/
 import { useAppState } from '@/lib/store';
 import { format } from 'date-fns';
 import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock, Trash2, Target } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import QAMonitoring from '@/components/QAMonitoring';
 import {
   AlertDialog,
   AlertDialogAction,
