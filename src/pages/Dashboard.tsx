@@ -385,6 +385,8 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
