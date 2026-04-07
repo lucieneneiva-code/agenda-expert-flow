@@ -30,8 +30,9 @@ export default function ActivityModal({
   const schools = getSchoolsForPec(pecId);
   const activityTypes = areaId === 'recomposicao' ? RECOMPOSICAO_ACTIVITY_TYPES : ACTIVITY_TYPES;
 
+  const defaultType = areaId === 'recomposicao' ? 'Recomposição de Habilidades' : 'Visita à Escola';
   const [activityType, setActivityType] = useState<ActivityType>(
-    existingEntry?.activity_type || 'Visita à Escola'
+    existingEntry?.activity_type || defaultType
   );
   const [schoolId, setSchoolId] = useState(existingEntry?.school_id || '');
   const [schoolOther, setSchoolOther] = useState(existingEntry?.school_other_text || '');
