@@ -79,7 +79,9 @@ const convivaPecNames = ['Márcia', 'Maria Caroline'];
 const multiplicaPecNames = ['Danila', 'Rosemari'];
 
 // Recomposição PECs
-const recomposicaoPecNames = ['Rodrigo'];
+const recomposicaoPecs: { name: string; schools: string[] }[] = [
+  { name: 'Rodrigo', schools: ['BENEDITO CELIO', 'CALHIM ABUD', 'ERODICE', 'HERBERT BALDUS', 'HERMINIO', 'JUVENTINA', 'LEVI CARNEIRO', 'HEITOR VILLA', 'MARIA AMELIA', 'MARIA SINISGALLI'] },
+];
 
 export const PECS: PEC[] = [
   ...qualidadePecs.map((p, i) => ({
