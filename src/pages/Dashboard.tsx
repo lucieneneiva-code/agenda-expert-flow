@@ -7,6 +7,7 @@ import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Lo
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import QAMonitoring from '@/components/QAMonitoring';
 import DCMonitoring from '@/components/DCMonitoring';
+import AreaMonitoring from '@/components/AreaMonitoring';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -171,10 +172,13 @@ export default function Dashboard() {
       <Header title="Painel da Coordenação" subtitle="Indicadores e relatórios" showBack />
       <main className="container mx-auto max-w-5xl px-4 py-6">
         <Tabs defaultValue="geral" className="w-full">
-          <TabsList className="mb-6 w-full justify-start">
+          <TabsList className="mb-6 w-full justify-start flex-wrap gap-1">
             <TabsTrigger value="geral">Visão Geral</TabsTrigger>
-            <TabsTrigger value="qa">Monitoramento PEC Qualidade da Aula</TabsTrigger>
-            <TabsTrigger value="dc">Monitoramento PEC Desenv. Curricular</TabsTrigger>
+            <TabsTrigger value="qa">PEC Qualidade da Aula</TabsTrigger>
+            <TabsTrigger value="dc">PEC Desenv. Curricular</TabsTrigger>
+            <TabsTrigger value="ee">PEC Educação Especial</TabsTrigger>
+            <TabsTrigger value="cv">PEC Conviva</TabsTrigger>
+            <TabsTrigger value="mp">PEC Multiplica</TabsTrigger>
           </TabsList>
 
           <TabsContent value="qa">
@@ -183,6 +187,18 @@ export default function Dashboard() {
 
           <TabsContent value="dc">
             <DCMonitoring />
+          </TabsContent>
+
+          <TabsContent value="ee">
+            <AreaMonitoring areaId="especial" areaLabel="Educação Especial" />
+          </TabsContent>
+
+          <TabsContent value="cv">
+            <AreaMonitoring areaId="conviva" areaLabel="Conviva" yearBasedCoverage />
+          </TabsContent>
+
+          <TabsContent value="mp">
+            <AreaMonitoring areaId="multiplica" areaLabel="Multiplica" yearBasedCoverage showConflicts />
           </TabsContent>
 
           <TabsContent value="geral">
