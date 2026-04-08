@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { BarChart3, Users, School, AlertTriangle, FileDown, FileText, Filter, Loader2, Lock, Trash2, Target } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import QAMonitoring from '@/components/QAMonitoring';
+import DCMonitoring from '@/components/DCMonitoring';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -173,10 +174,15 @@ export default function Dashboard() {
           <TabsList className="mb-6 w-full justify-start">
             <TabsTrigger value="geral">Visão Geral</TabsTrigger>
             <TabsTrigger value="qa">Monitoramento PEC Qualidade da Aula</TabsTrigger>
+            <TabsTrigger value="dc">Monitoramento PEC Desenv. Curricular</TabsTrigger>
           </TabsList>
 
           <TabsContent value="qa">
             <QAMonitoring />
+          </TabsContent>
+
+          <TabsContent value="dc">
+            <DCMonitoring />
           </TabsContent>
 
           <TabsContent value="geral">
