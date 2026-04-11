@@ -3,6 +3,7 @@ import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getSchoolsForPec, getDayDate } from '
 import { useAppState } from '@/lib/store';
 import { BarChart3, School, AlertTriangle, CheckCircle2, XCircle, Filter, TrendingUp, FileDown, Activity } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
+import VisitConfirmationBI from './VisitConfirmationBI';
 import * as XLSX from 'xlsx';
 
 const PIE_COLORS = [
