@@ -411,6 +411,11 @@ export default function AreaMonitoring({ areaId, areaLabel, yearBasedCoverage, s
         </div>
       </div>
 
+      {/* Visit Confirmation BI */}
+      <div className="rounded-xl bg-card shadow-card overflow-hidden">
+        <VisitConfirmationBI entries={entries} areaId={areaId} selectedFortnight={selectedFortnight} />
+      </div>
+
       {/* Export */}
       <button onClick={exportExcel} className="flex items-center gap-2 rounded-lg gradient-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:opacity-90 transition">
         <FileDown className="h-4 w-4" />
