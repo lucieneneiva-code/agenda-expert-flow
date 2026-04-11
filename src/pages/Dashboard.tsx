@@ -159,6 +159,9 @@ export default function Dashboard() {
         Observação: e.observation || '',
         Pauta: e.agenda_topic || '',
         Link: e.link || '',
+        'Status Visita': e.status_visita === 'realizada' ? 'Realizada' : e.status_visita === 'nao_realizada' ? 'Não realizada' : e.status_visita ? e.status_visita : '',
+        'Link Termo': e.link_termo || '',
+        'Data Confirmação': e.data_confirmacao ? format(new Date(e.data_confirmacao), 'dd/MM/yyyy HH:mm') : '',
       };
     });
     const ws = XLSX.utils.json_to_sheet(data);

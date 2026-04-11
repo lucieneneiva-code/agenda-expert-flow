@@ -3,6 +3,7 @@ import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getSchoolsForPec, getDayDate } from '
 import { useAppState } from '@/lib/store';
 import { BarChart3, School, AlertTriangle, CheckCircle2, XCircle, Filter, TrendingUp, FileDown, Activity } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
+import VisitConfirmationBI from './VisitConfirmationBI';
 import * as XLSX from 'xlsx';
 
 const DC_AREA_ID = 'curricular';
@@ -370,6 +371,11 @@ export default function DCMonitoring() {
             </div>
           ) : <p className="text-xs text-muted-foreground">Nenhum PEC com alta atuação ainda</p>}
         </div>
+      </div>
+
+      {/* Visit Confirmation BI */}
+      <div className="rounded-xl bg-card shadow-card overflow-hidden">
+        <VisitConfirmationBI entries={entries} areaId={DC_AREA_ID} selectedFortnight={selectedFortnight} />
       </div>
 
       {/* Export */}

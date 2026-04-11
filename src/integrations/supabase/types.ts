@@ -20,15 +20,18 @@ export type Database = {
           agenda_topic: string | null
           area_id: string
           created_at: string
+          data_confirmacao: string | null
           day_id: string
           fortnight_id: string
           id: string
           link: string | null
+          link_termo: string | null
           observation: string | null
           pec_id: string
           period: string
           school_id: string | null
           school_other_text: string | null
+          status_visita: string | null
           type_other_text: string | null
           updated_at: string
         }
@@ -37,15 +40,18 @@ export type Database = {
           agenda_topic?: string | null
           area_id: string
           created_at?: string
+          data_confirmacao?: string | null
           day_id: string
           fortnight_id: string
           id?: string
           link?: string | null
+          link_termo?: string | null
           observation?: string | null
           pec_id: string
           period: string
           school_id?: string | null
           school_other_text?: string | null
+          status_visita?: string | null
           type_other_text?: string | null
           updated_at?: string
         }
@@ -54,15 +60,18 @@ export type Database = {
           agenda_topic?: string | null
           area_id?: string
           created_at?: string
+          data_confirmacao?: string | null
           day_id?: string
           fortnight_id?: string
           id?: string
           link?: string | null
+          link_termo?: string | null
           observation?: string | null
           pec_id?: string
           period?: string
           school_id?: string | null
           school_other_text?: string | null
+          status_visita?: string | null
           type_other_text?: string | null
           updated_at?: string
         }

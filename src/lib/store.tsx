@@ -31,6 +31,9 @@ function mapRow(row: any): AgendaEntry {
     agenda_topic: row.agenda_topic,
     link: row.link,
     type_other_text: row.type_other_text,
+    status_visita: row.status_visita,
+    link_termo: row.link_termo,
+    data_confirmacao: row.data_confirmacao,
     created_at: row.created_at,
     updated_at: row.updated_at,
   };

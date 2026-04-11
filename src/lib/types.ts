@@ -77,6 +77,9 @@ export interface AgendaEntry {
   agenda_topic: string | null;
   link: string | null;
   type_other_text: string | null;
+  status_visita: string | null;
+  link_termo: string | null;
+  data_confirmacao: string | null;
   created_at: string;
   updated_at: string;
 }

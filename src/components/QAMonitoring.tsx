@@ -3,6 +3,7 @@ import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getPecMeta, getSchoolsForPec, getDayD
 import { useAppState } from '@/lib/store';
 import { BarChart3, School, AlertTriangle, CheckCircle2, XCircle, Clock, FileDown, Filter, TrendingUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import VisitConfirmationBI from './VisitConfirmationBI';
 import * as XLSX from 'xlsx';
 
 const QA_AREA_ID = 'qualidade';
@@ -372,6 +373,11 @@ export default function QAMonitoring() {
             </div>
           ) : <p className="text-xs text-muted-foreground">Nenhum PEC completou a meta ainda</p>}
         </div>
+      </div>
+
+      {/* Visit Confirmation BI */}
+      <div className="rounded-xl bg-card shadow-card overflow-hidden">
+        <VisitConfirmationBI entries={entries} areaId={QA_AREA_ID} selectedFortnight={selectedFortnight} />
       </div>
 
       {/* Export */}

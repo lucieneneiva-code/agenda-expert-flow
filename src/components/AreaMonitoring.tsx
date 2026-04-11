@@ -3,6 +3,7 @@ import { AREAS, PECS, FORTNIGHTS, SCHOOLS, getSchoolsForPec, getDayDate } from '
 import { useAppState } from '@/lib/store';
 import { BarChart3, School, AlertTriangle, CheckCircle2, XCircle, Filter, TrendingUp, FileDown, Activity } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
+import VisitConfirmationBI from './VisitConfirmationBI';
 import * as XLSX from 'xlsx';
 
 const PIE_COLORS = [
@@ -408,6 +409,11 @@ export default function AreaMonitoring({ areaId, areaLabel, yearBasedCoverage, s
             </div>
           ) : <p className="text-xs text-muted-foreground">—</p>}
         </div>
+      </div>
+
+      {/* Visit Confirmation BI */}
+      <div className="rounded-xl bg-card shadow-card overflow-hidden">
+        <VisitConfirmationBI entries={entries} areaId={areaId} selectedFortnight={selectedFortnight} />
       </div>
 
       {/* Export */}

@@ -88,6 +88,9 @@ export default function ActivityModal({
       agenda_topic: agendaTopic || null,
       link: link || null,
       type_other_text: activityType === 'Outros' ? typeOther : null,
+      status_visita: existingEntry?.status_visita || null,
+      link_termo: existingEntry?.link_termo || null,
+      data_confirmacao: existingEntry?.data_confirmacao || null,
     };
 
     try {
