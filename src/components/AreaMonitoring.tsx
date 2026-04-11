@@ -153,6 +153,12 @@ export default function AreaMonitoring({ areaId, areaLabel, yearBasedCoverage, s
         'Escola': school?.name || e.school_other_text || '',
         'Tipo de ação': e.activity_type,
         'Data': date ? date.split('-').reverse().join('/') : '',
+        'Período': e.period === 'manha' ? 'Manhã' : 'Tarde',
+        'Observação': e.observation || '',
+        'Pauta': e.agenda_topic || '',
+        'Status Visita': e.status_visita === 'realizada' ? 'Realizada' : e.status_visita === 'nao_realizada' ? 'Não realizada' : '',
+        'Link do Termo de Visita': e.link_termo || '',
+        'Data Confirmação': e.data_confirmacao ? new Date(e.data_confirmacao).toLocaleString('pt-BR') : '',
       };
     });
     const ws = XLSX.utils.json_to_sheet(data);
