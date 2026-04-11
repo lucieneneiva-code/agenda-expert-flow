@@ -134,7 +134,7 @@ export default function QAMonitoring() {
   }, [visits, selectedSchool]);
 
   const exportQAExcel = () => {
-    const rows = displayPecs.flatMap(p =>
+    const metaRows = displayPecs.flatMap(p =>
       p.pecSchools.map(s => ({
         PEC: p.pec.name,
         Escola: s.name,
@@ -144,9 +144,27 @@ export default function QAMonitoring() {
         Status: p.visitedSchoolIds.has(s.id) ? 'Visitada' : 'Não visitada',
       }))
     );
-    const ws = XLSX.utils.json_to_sheet(rows);
+    const visitRows = filteredEntries.map(e => {
+      const pec = PECS.find(p => p.id === e.pec_id);
+      const school = SCHOOLS.find(s => s.id === e.school_id);
+      const dateRaw = getDayDate(e.day_id);
+      return {
+        PEC: pec?.name || '',
+        Escola: school?.name || e.school_other_text || '',
+        'Tipo de Ação': e.activity_type,
+        Data: dateRaw ? dateRaw.split('-').reverse().join('/') : '',
+        Período: e.period === 'manha' ? 'Manhã' : 'Tarde',
+        Observação: e.observation || '',
+        'Status Visita': e.status_visita === 'realizada' ? 'Realizada' : e.status_visita === 'nao_realizada' ? 'Não realizada' : '',
+        'Link do Termo de Visita': e.link_termo || '',
+        'Data Confirmação': e.data_confirmacao ? new Date(e.data_confirmacao).toLocaleString('pt-BR') : '',
+      };
+    });
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'QA Monitoramento');
+    const ws1 = XLSX.utils.json_to_sheet(metaRows);
+    XLSX.utils.book_append_sheet(wb, ws1, 'QA Metas');
+    const ws2 = XLSX.utils.json_to_sheet(visitRows);
+    XLSX.utils.book_append_sheet(wb, ws2, 'QA Detalhado');
     XLSX.writeFile(wb, 'relatorio-pec-qualidade.xlsx');
   };
 
