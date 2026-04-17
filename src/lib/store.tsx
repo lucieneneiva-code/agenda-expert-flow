@@ -6,6 +6,8 @@ import { toast } from 'sonner';
 interface AppState {
   entries: AgendaEntry[];
   loading: boolean;
+  previewUnstable: boolean;
+  reload: () => Promise<void>;
   addEntry: (entry: Omit<AgendaEntry, 'id' | 'created_at' | 'updated_at'>) => Promise<any>;
   updateEntry: (id: string, updates: Partial<AgendaEntry>) => Promise<any>;
   deleteEntry: (id: string) => Promise<void>;
@@ -39,78 +41,127 @@ function mapRow(row: any): AgendaEntry {
   };
 }
 
+// Detect Lovable preview environment (proxy may intercept fetch)
+const isPreviewEnv = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const h = window.location.hostname;
+  return h.includes('lovableproject.com') || h.includes('lovable.app') && h.includes('id-preview');
+};
+
+// Classify whether an error is a transient preview/proxy fetch failure
+const isTransientFetchError = (err: any): boolean => {
+  const msg = String(err?.message || err || '');
+  const details = String(err?.details || '');
+  return (
+    msg.includes('Failed to fetch') ||
+    msg.includes('NetworkError') ||
+    details.includes('Failed to fetch') ||
+    details.includes('lovable.js')
+  );
+};
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const [entries, setEntries] = useState<AgendaEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [previewUnstable, setPreviewUnstable] = useState(false);
+  const cancelledRef = useRef(false);
+  const toastShownRef = useRef(false);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
-  // Initial fetch with resilient retry + integrity check (prevention layer)
-  useEffect(() => {
-    let cancelled = false;
+  const LAST_COUNT_KEY = 'agenda_last_known_count';
 
-    const LAST_COUNT_KEY = 'agenda_last_known_count';
+  const fetchOnce = useCallback(async () => {
+    return await supabase
+      .from('agenda_entries')
+      .select('*')
+      .order('created_at', { ascending: true });
+  }, []);
 
-    const fetchOnce = async () => {
-      return await supabase
-        .from('agenda_entries')
-        .select('*')
-        .order('created_at', { ascending: true });
-    };
+  const fetchEntries = useCallback(async (isManualReload = false) => {
+    const maxAttempts = 4;
+    let lastError: any = null;
 
-    const fetchEntries = async () => {
-      const maxAttempts = 4;
-      let lastError: any = null;
+    if (isManualReload) setLoading(true);
 
-      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const { data, error } = await fetchOnce();
+        if (error) throw error;
+        if (cancelledRef.current) return;
+
+        const mapped = (data || []).map(mapRow);
+
+        // Integrity check (silent)
         try {
-          const { data, error } = await fetchOnce();
-          if (error) throw error;
-          if (cancelled) return;
-
-          const mapped = (data || []).map(mapRow);
-
-          // Integrity check: warn (silently) if count dropped vs last known load
-          try {
-            const prev = Number(localStorage.getItem(LAST_COUNT_KEY) || '0');
-            if (prev > 0 && mapped.length < prev) {
-              console.warn(
-                `[integrity] Carga atual (${mapped.length}) menor que última conhecida (${prev}). Mantendo dados visíveis.`
-              );
-            }
-            localStorage.setItem(LAST_COUNT_KEY, String(Math.max(prev, mapped.length)));
-          } catch {
-            /* storage indisponível, ignorar silenciosamente */
+          const prev = Number(localStorage.getItem(LAST_COUNT_KEY) || '0');
+          if (prev > 0 && mapped.length < prev) {
+            console.warn(
+              `[integrity] Carga atual (${mapped.length}) menor que última conhecida (${prev}). Mantendo dados visíveis.`
+            );
           }
+          localStorage.setItem(LAST_COUNT_KEY, String(Math.max(prev, mapped.length)));
+        } catch {
+          /* ignore */
+        }
 
-          setEntries(mapped);
-          setLoading(false);
-          return;
-        } catch (err) {
-          lastError = err;
-          console.error(`[fetch] Tentativa ${attempt}/${maxAttempts} falhou:`, err);
-          if (attempt < maxAttempts && !cancelled) {
-            await new Promise(r => setTimeout(r, 500 * attempt)); // backoff: 0.5s, 1s, 1.5s
-          }
+        setEntries(mapped);
+        setLoading(false);
+        setPreviewUnstable(false);
+        toastShownRef.current = false;
+        return;
+      } catch (err) {
+        lastError = err;
+        console.warn(`[fetch] Tentativa ${attempt}/${maxAttempts} falhou:`, err);
+        if (attempt < maxAttempts && !cancelledRef.current) {
+          await new Promise(r => setTimeout(r, 500 * attempt));
+        }
+      }
+    }
+
+    if (!cancelledRef.current) {
+      const transient = isTransientFetchError(lastError) && isPreviewEnv();
+      console.warn('[fetch] Falha após retries. Transiente/preview:', transient, lastError);
+
+      // NÃO limpar entries — preserva dados já renderizados
+      setLoading(false);
+
+      if (transient) {
+        // Erro de preview: mensagem leve, não destrutiva
+        setPreviewUnstable(true);
+        if (!toastShownRef.current) {
+          toast('Instabilidade temporária na visualização. Seus agendamentos continuam salvos.', {
+            description: 'Tentando reconectar automaticamente…',
+          });
+          toastShownRef.current = true;
+        }
+      } else {
+        // Erro real (não-preview)
+        if (!toastShownRef.current) {
+          toast.error('Falha de conexão. Tentaremos novamente automaticamente.');
+          toastShownRef.current = true;
         }
       }
 
-      if (!cancelled) {
-        console.error('Erro ao carregar dados após retries:', lastError);
-        toast.error('Falha de conexão. Tentaremos novamente automaticamente.');
-        setLoading(false);
-        // Schedule a final background retry without blocking UI
-        setTimeout(() => {
-          if (!cancelled) fetchEntries();
-        }, 5000);
-      }
-    };
+      // Background retry silencioso
+      setTimeout(() => {
+        if (!cancelledRef.current) fetchEntries();
+      }, 5000);
+    }
+  }, [fetchOnce]);
 
+  // Initial fetch
+  useEffect(() => {
+    cancelledRef.current = false;
     fetchEntries();
-
     return () => {
-      cancelled = true;
+      cancelledRef.current = true;
     };
-  }, []);
+  }, [fetchEntries]);
+
+  const reload = useCallback(async () => {
+    toastShownRef.current = false;
+    await fetchEntries(true);
+  }, [fetchEntries]);
 
   // Realtime subscription
   useEffect(() => {
@@ -217,7 +268,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   return (
     <AppContext.Provider
-      value={{ entries, loading, addEntry, updateEntry, deleteEntry, getEntriesForCell, getEntriesForPecFortnight, getAllEntries }}
+      value={{ entries, loading, previewUnstable, reload, addEntry, updateEntry, deleteEntry, getEntriesForCell, getEntriesForPecFortnight, getAllEntries }}
     >
       {children}
     </AppContext.Provider>
