@@ -44,24 +44,72 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
-  // Initial fetch
+  // Initial fetch with resilient retry + integrity check (prevention layer)
   useEffect(() => {
-    const fetchEntries = async () => {
-      const { data, error } = await supabase
+    let cancelled = false;
+
+    const LAST_COUNT_KEY = 'agenda_last_known_count';
+
+    const fetchOnce = async () => {
+      return await supabase
         .from('agenda_entries')
         .select('*')
         .order('created_at', { ascending: true });
+    };
 
-      if (error) {
-        console.error('Error fetching entries:', error);
-        toast.error('Erro ao carregar dados');
-      } else {
-        setEntries((data || []).map(mapRow));
+    const fetchEntries = async () => {
+      const maxAttempts = 4;
+      let lastError: any = null;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          const { data, error } = await fetchOnce();
+          if (error) throw error;
+          if (cancelled) return;
+
+          const mapped = (data || []).map(mapRow);
+
+          // Integrity check: warn (silently) if count dropped vs last known load
+          try {
+            const prev = Number(localStorage.getItem(LAST_COUNT_KEY) || '0');
+            if (prev > 0 && mapped.length < prev) {
+              console.warn(
+                `[integrity] Carga atual (${mapped.length}) menor que última conhecida (${prev}). Mantendo dados visíveis.`
+              );
+            }
+            localStorage.setItem(LAST_COUNT_KEY, String(Math.max(prev, mapped.length)));
+          } catch {
+            /* storage indisponível, ignorar silenciosamente */
+          }
+
+          setEntries(mapped);
+          setLoading(false);
+          return;
+        } catch (err) {
+          lastError = err;
+          console.error(`[fetch] Tentativa ${attempt}/${maxAttempts} falhou:`, err);
+          if (attempt < maxAttempts && !cancelled) {
+            await new Promise(r => setTimeout(r, 500 * attempt)); // backoff: 0.5s, 1s, 1.5s
+          }
+        }
       }
-      setLoading(false);
+
+      if (!cancelled) {
+        console.error('Erro ao carregar dados após retries:', lastError);
+        toast.error('Falha de conexão. Tentaremos novamente automaticamente.');
+        setLoading(false);
+        // Schedule a final background retry without blocking UI
+        setTimeout(() => {
+          if (!cancelled) fetchEntries();
+        }, 5000);
+      }
     };
 
     fetchEntries();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Realtime subscription
