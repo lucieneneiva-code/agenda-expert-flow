@@ -3,6 +3,7 @@ import { AgendaEntry } from '@/lib/types';
 import { useAppState } from '@/lib/store';
 import { X, CheckCircle2, Loader2, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
+import { safeHttpUrl, isSafeHttpUrl } from '@/lib/utils';
 
 interface ConfirmVisitModalProps {
   open: boolean;
