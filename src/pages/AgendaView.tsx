@@ -7,6 +7,7 @@ import { AREAS, PECS, FORTNIGHTS, SCHOOLS, generateFortnightDays, getPecMeta } f
 import { useAppState } from '@/lib/store';
 import { Period, AgendaEntry } from '@/lib/types';
 import { Plus, Check, CheckCircle2, XCircle, Clock, ExternalLink } from 'lucide-react';
+import { safeHttpUrl } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
