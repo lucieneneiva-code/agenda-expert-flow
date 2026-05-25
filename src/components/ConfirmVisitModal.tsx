@@ -80,8 +80,8 @@ export default function ConfirmVisitModal({ open, onClose, entry }: ConfirmVisit
             <p className="font-medium">
               Status atual: {entry.status_visita === 'realizada' ? '✅ Realizada' : '❌ Não realizada'}
             </p>
-            {entry.link_termo && (
-              <a href={entry.link_termo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-1 underline text-xs">
+            {safeHttpUrl(entry.link_termo) && (
+              <a href={safeHttpUrl(entry.link_termo)!} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-1 underline text-xs">
                 <ExternalLink className="h-3 w-3" /> Ver termo
               </a>
             )}
