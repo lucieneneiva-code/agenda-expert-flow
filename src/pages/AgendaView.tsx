@@ -201,9 +201,9 @@ export default function AgendaView() {
                           {/* Confirmation actions for Q05+ visits */}
                           {canConfirm && (
                             <div className="flex items-center gap-1 mt-0.5">
-                              {entry.status_visita === 'realizada' && entry.link_termo ? (
+                              {entry.status_visita === 'realizada' && safeHttpUrl(entry.link_termo) ? (
                                 <a
-                                  href={entry.link_termo}
+                                  href={safeHttpUrl(entry.link_termo)!}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   onClick={e => e.stopPropagation()}
