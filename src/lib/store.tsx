@@ -220,7 +220,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }
       throw error;
     }
-    // Return successfully - data confirmed by select()
+
+    // Persistência confirmada pelo banco. Atualiza estado local imediatamente
+    // (dedupe por id — o handler de realtime ignora duplicatas).
+    if (data && data.length > 0) {
+      const inserted = data.map(mapRow);
+      setEntries(prev => {
+        const existingIds = new Set(prev.map(e => e.id));
+        const fresh = inserted.filter(e => !existingIds.has(e.id));
+        return fresh.length ? [...prev, ...fresh] : prev;
+      });
+    }
     return data;
   }, []);
 
@@ -237,11 +247,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
       toast.error('Erro ao atualizar atividade.');
       throw error;
     }
+
+    // Atualiza estado local imediatamente após confirmação do banco.
+    if (data && data.length > 0) {
+      const updated = mapRow(data[0]);
+      setEntries(prev => prev.map(e => (e.id === updated.id ? updated : e)));
+    }
     return data;
   }, []);
 
   const deleteEntry = useCallback(async (id: string) => {
     const { error } = await supabase.from('agenda_entries').delete().eq('id', id);
+
+
 
     if (error) {
       console.error('Error deleting entry:', error);
