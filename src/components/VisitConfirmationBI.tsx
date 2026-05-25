@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { AgendaEntry } from '@/lib/types';
 import { PECS, SCHOOLS, FORTNIGHTS, getDayDate } from '@/lib/data';
 import { CheckCircle2, XCircle, Clock, AlertTriangle, ExternalLink } from 'lucide-react';
+import { safeHttpUrl } from '@/lib/utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 
 const CONFIRMATION_START_FORTNIGHT_ORDER = 5;
