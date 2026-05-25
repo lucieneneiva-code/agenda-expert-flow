@@ -20,14 +20,7 @@ export default function ConfirmVisitModal({ open, onClose, entry }: ConfirmVisit
 
   if (!open) return null;
 
-  const isValidUrl = (url: string) => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
+  const isValidUrl = (url: string) => isSafeHttpUrl(url);
 
   const handleSave = async () => {
     if (!status) {
