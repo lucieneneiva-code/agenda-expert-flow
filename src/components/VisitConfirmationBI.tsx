@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { AgendaEntry } from '@/lib/types';
 import { PECS, SCHOOLS, FORTNIGHTS, getDayDate } from '@/lib/data';
 import { CheckCircle2, XCircle, Clock, AlertTriangle, ExternalLink } from 'lucide-react';
+import { safeHttpUrl } from '@/lib/utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 
 const CONFIRMATION_START_FORTNIGHT_ORDER = 5;
@@ -245,8 +246,8 @@ export default function VisitConfirmationBI({ entries, areaId, selectedFortnight
                       </span>
                     </td>
                     <td className="px-3 py-1.5 text-center">
-                      {d.link ? (
-                        <a href={d.link} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-0.5">
+                      {safeHttpUrl(d.link) ? (
+                        <a href={safeHttpUrl(d.link)!} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-0.5">
                           <ExternalLink className="h-3 w-3" /> Ver
                         </a>
                       ) : '—'}
