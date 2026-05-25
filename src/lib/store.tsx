@@ -259,13 +259,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const deleteEntry = useCallback(async (id: string) => {
     const { error } = await supabase.from('agenda_entries').delete().eq('id', id);
 
-
-
     if (error) {
       console.error('Error deleting entry:', error);
       toast.error('Erro ao excluir atividade.');
       throw error;
     }
+
+    // Remove do estado local imediatamente após confirmação do banco.
+    setEntries(prev => prev.filter(e => e.id !== id));
   }, []);
 
   const getEntriesForCell = useCallback(
