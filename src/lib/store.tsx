@@ -71,10 +71,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const LAST_COUNT_KEY = 'agenda_last_known_count';
 
   const fetchOnce = useCallback(async () => {
-    return await supabase
-      .from('agenda_entries')
-      .select('*')
-      .order('created_at', { ascending: true });
+    // Pagina em blocos para contornar o limite padrão de 1000 linhas do PostgREST.
+    const pageSize = 1000;
+    let from = 0;
+    const all: any[] = [];
+    while (true) {
+      const { data, error } = await supabase
+        .from('agenda_entries')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .range(from, from + pageSize - 1);
+      if (error) return { data: null, error } as const;
+      if (!data || data.length === 0) break;
+      all.push(...data);
+      if (data.length < pageSize) break;
+      from += pageSize;
+    }
+    return { data: all, error: null } as const;
   }, []);
 
   const fetchEntries = useCallback(async (isManualReload = false) => {
